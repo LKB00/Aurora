@@ -1,15 +1,16 @@
 // Prototype-only controls: switch scenario, move the clock forward, start over. Kept behind one button so the product screens stay product screens.
-import { Badge, Button, IconButton, SectionLabel, SegmentedControl, SettingsIcon, TrayRow } from '@tattva/ui'
+import { Badge, Button, SectionLabel, SegmentedControl, SettingsIcon, TrayRow } from '@tattva/ui'
 import { SCENARIOS } from '../data/scenarios'
 import { useApp, useNav } from '../state/store'
 import { Screen } from './Screen'
 
+/** A tool for whoever is reviewing the prototype, not part of Aurora: small, flat, dashed, no shadow, always top-right. */
 export function DemoButton() {
   const nav = useNav()
   return (
-    <IconButton label="Prototype controls" variant="ghost" className="size-11" onClick={() => nav.push({ name: 'controls' })}>
-      <SettingsIcon width={18} height={18} />
-    </IconButton>
+    <button type="button" aria-label="Prototype controls" title="Prototype controls" onClick={() => nav.push({ name: 'controls' })} className="group grid size-11 cursor-pointer place-items-center rounded-full">
+      <span className="grid size-8 place-items-center rounded-full border border-dashed border-line-strong text-fg-subtle group-hover:text-fg group-active:bg-pressed"><SettingsIcon width={16} height={16} /></span>
+    </button>
   )
 }
 

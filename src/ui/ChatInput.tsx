@@ -32,7 +32,7 @@ export function ChatInput({ placeholder = 'Ask for anything', onSend, initialVal
   }
   return (
     <div className="flex items-end gap-2.5">
-      <label className={`flex min-h-14 min-w-0 flex-1 cursor-text items-end gap-3 border border-line bg-surface py-2 pr-2 pl-4 shadow-sm ${above || tall ? 'rounded-3xl' : 'rounded-full'}`}>
+      <label className={`flex min-h-14 min-w-0 flex-1 cursor-text items-end gap-3 border border-line bg-surface py-2 pr-2 pl-4 ${above || tall ? 'rounded-3xl' : 'rounded-full'}`}>
         <span className="grid h-10 place-items-center text-fg-muted" aria-hidden><PlusIcon width={24} height={24} /></span>
         <span className="flex min-w-0 flex-1 flex-col gap-2">
         {above}
@@ -54,7 +54,7 @@ export function ChatInput({ placeholder = 'Ask for anything', onSend, initialVal
         )}
       </label>
       {/* Once there is a message the voice orb steps aside, so the text gets the full width. */}
-      {!value.trim() && <span className="grid size-14 shrink-0 place-items-center rounded-full border border-line bg-surface shadow-sm" aria-hidden><Orb /></span>}
+      {!value.trim() && <span className="grid size-14 shrink-0 place-items-center rounded-full border border-line bg-surface" aria-hidden><Orb /></span>}
     </div>
   )
 }

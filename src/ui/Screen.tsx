@@ -89,7 +89,7 @@ export function Screen({ title, subtitle, back = true, onBack, backLabel: backLa
           <Button size="lg" variant="ghost" onClick={nav.back} aria-label="Close" className="size-11 rounded-full p-0 text-fg-muted bg-transparent! hover:bg-transparent!">
             <span className="grid size-8 place-items-center rounded-full bg-sunken ring-1 ring-line"><XIcon width={16} height={16} /></span>
           </Button>
-        ) : actions ? <div className="glass glass-float flex min-w-11 items-center justify-center rounded-full">{actions}</div> : <div />}
+        ) : actions ?? <div />}
       </header>
       {sheet && (
         // The handle: drag it (or tap it) to resize the sheet. It shows only at medium height; a full sheet is a whole screen, so it has no handle or rounded corners (drag the top bar or swipe down to shrink it).

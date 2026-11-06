@@ -25,18 +25,10 @@ html[data-ios] { --font-sans: -apple-system, 'SF Pro Text', BlinkMacSystemFont, 
   -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.04);
   backdrop-filter: blur(24px) saturate(180%) brightness(1.04);
 }
-/* Floating controls (round buttons, pills) are the "lens" pieces. Liquid Glass reads as a thick, clear material, so they get:
-   a more opaque fill (icons stay legible over photos), a soft top-down sheen, a bright specular rim along the top edge, a faint
-   dark hairline all round, and a two-part shadow (tight contact + soft lift). */
+/* Floating controls (the round back button): frosted fill and a hairline. No drop shadow, so they sit on the page instead of hovering over it. */
 .glass-float {
   background-color: color-mix(in srgb, var(--color-bg) 82%, transparent);
-  background-image: linear-gradient(180deg, color-mix(in srgb, var(--color-surface) 75%, transparent) 0%, transparent 60%);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--color-surface) 95%, transparent),
-    inset 0 0 0 0.5px color-mix(in srgb, var(--color-fg) 14%, transparent),
-    inset 0 -1px 2px color-mix(in srgb, var(--color-fg) 8%, transparent),
-    0 1px 2px color-mix(in srgb, var(--color-fg) 18%, transparent),
-    0 10px 24px -10px color-mix(in srgb, var(--color-fg) 38%, transparent);
+  box-shadow: inset 0 0 0 0.5px color-mix(in srgb, var(--color-fg) 16%, transparent);
 }
 .glass-float svg { stroke-width: 2; }
 .glass-float:hover { background-color: color-mix(in srgb, var(--color-bg) 92%, transparent); }

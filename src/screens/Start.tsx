@@ -30,12 +30,12 @@ export function Start() {
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-[14%] bottom-[30%] bg-fg-subtle opacity-20 [mask-image:var(--map)] [mask-position:48%_center] [mask-repeat:no-repeat] [mask-size:135%_auto] [-webkit-mask-image:var(--map)] [-webkit-mask-position:48%_center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:135%_auto]" style={{ ['--map' as string]: `url(${worldDots})` }} />
 
       <header className="relative z-10 grid grid-cols-[44px_1fr_44px] items-start px-3 pt-3">
-        <div className="glass glass-float flex size-11 items-center justify-center rounded-full"><DemoButton /></div>
+        <span />
         <div className="flex flex-col items-center gap-1">
           <img src={auroraMark} alt="Aurora" className="h-9 w-auto" />
           <span className="flex items-center gap-1 text-note leading-4 text-fg-muted"><LocationIcon width={14} height={14} />{req.location}</span>
         </div>
-        <span />
+        <DemoButton />
       </header>
 
       <main className="relative z-10 flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
