@@ -1,15 +1,18 @@
 // Prototype-only controls: switch scenario, move the clock forward, start over. Kept behind one button so the product screens stay product screens.
-import { Badge, Button, SectionLabel, SegmentedControl, SettingsIcon, TrayRow } from '@tattva/ui'
+import { Badge, Button, SectionLabel, SegmentedControl, TrayRow } from '@tattva/ui'
 import { SCENARIOS } from '../data/scenarios'
 import { useApp, useNav } from '../state/store'
 import { Screen } from './Screen'
 
-/** A tool for whoever is reviewing the prototype, not part of Aurora: small, flat, dashed, no shadow, always top-right. */
+/** A tool for whoever is reviewing the prototype, not part of Aurora: a flat dashed "DEMO" tag with a flask, in a mono face, no shadow, always top-right. Gap: drawn here, Tattva has no flask. */
 export function DemoButton() {
   const nav = useNav()
   return (
-    <button type="button" aria-label="Prototype controls" title="Prototype controls" onClick={() => nav.push({ name: 'controls' })} className="group grid size-11 cursor-pointer place-items-center rounded-full">
-      <span className="grid size-8 place-items-center rounded-full border border-dashed border-line-strong text-fg-subtle group-hover:text-fg group-active:bg-pressed"><SettingsIcon width={16} height={16} /></span>
+    <button type="button" aria-label="Prototype controls" title="Prototype controls" onClick={() => nav.push({ name: 'controls' })} className="group grid h-11 min-w-11 cursor-pointer place-items-center justify-self-end rounded-full px-1">
+      <span className="flex h-7 items-center gap-1 rounded-md border border-dashed border-line-strong px-2 font-mono text-[11px] leading-none font-medium tracking-wider text-fg-subtle uppercase group-hover:text-fg group-active:bg-pressed">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3" /><path d="M7.5 15h9" /></svg>
+        Demo
+      </span>
     </button>
   )
 }
