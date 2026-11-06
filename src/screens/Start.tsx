@@ -1,7 +1,7 @@
 // Where the prototype begins: Aurora's landing. "Find anything." over a quiet map of dots, a row of things to try, and the message bar.
 // Tapping the first one writes the request (with its photo) into the bar; sending it starts the story: ask, watch Aurora work, get the answer.
 import { useState } from 'react'
-import { AISuggestIcon, SectionLabel } from '@tattva/ui'
+import { AISuggestIcon, SectionLabel, XIcon } from '@tattva/ui'
 import worldDots from '../assets/world-dots.svg'
 import auroraMark from '../assets/aurora-mark.png'
 import { DEFAULT_SCENARIO, SCENARIOS } from '../data/scenarios'
@@ -20,9 +20,10 @@ export function Start() {
   const { d, dispatch } = useApp()
   const req = d.scenario.request
   const [pickedId, setPickedId] = useState<string | null>(null)
+  const [photoOff, setPhotoOff] = useState(false)
   const draft = pickedId ? (SCENARIOS.find((s) => s.id === pickedId)?.request.text ?? '') : ''
-  const draftPhoto = pickedId ? SCENARIOS.find((s) => s.id === pickedId)?.request.attachments?.[0] : undefined
-  const pick = (id: string) => setPickedId(id)
+  const draftPhoto = pickedId && !photoOff ? SCENARIOS.find((s) => s.id === pickedId)?.request.attachments?.[0] : undefined
+  const pick = (id: string) => { setPickedId(id); setPhotoOff(false) }
   return (
     <div className="relative flex h-full w-full flex-col overflow-hidden bg-bg text-fg" style={{ paddingTop: 'var(--safe-top, 0px)', paddingBottom: 'var(--safe-bottom, 0px)' }}>
       {/* The world, as dots, behind the question. Decoration only. */}
@@ -63,7 +64,14 @@ export function Start() {
             placeholder="Ask for anything"
             initialValue={draft}
             onSend={() => dispatch({ type: 'BEGIN', id: pickedId ?? undefined })}
-            above={draftPhoto ? <img src={draftPhoto.src} alt={draftPhoto.alt} className="h-16 w-24 rounded-xl object-cover" /> : undefined}
+            above={draftPhoto ? (
+              <span className="relative self-start">
+                <img src={draftPhoto.src} alt={draftPhoto.alt} className="h-16 w-24 rounded-xl object-cover" />
+                <button type="button" aria-label="Remove photo" onClick={() => setPhotoOff(true)} className="absolute -top-2 -right-2 grid size-11 cursor-pointer place-items-center rounded-full bg-transparent before:absolute before:size-6 before:rounded-full before:bg-surface before:shadow-sm before:ring-1 before:ring-line">
+                  <XIcon className="relative" width={14} height={14} />
+                </button>
+              </span>
+            ) : undefined}
           />
         </div>
         <p className="m-0 px-2 text-center text-note leading-4 text-fg-muted">Prototype: nothing calls a real business. Tap a suggestion, then send.</p>
