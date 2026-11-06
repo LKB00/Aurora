@@ -1,0 +1,20 @@
+/* The iPhone mockup is hardware, not product UI, so its materials (titanium, glass, black bezel) are plain device colours
+   and live only in this file. Nothing inside the screen uses them: the app itself stays on Tattva tokens. */
+.iphone-stage { height: 100dvh; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; background: var(--color-sunken); overflow: hidden; }
+.iphone { position: relative; width: 418px; height: 872px; flex: none; transform-origin: center center; }
+.iphone-body {
+  position: absolute; inset: 0; border-radius: 68px;
+  background: linear-gradient(145deg, #8a8a8e 0%, #4b4b4f 18%, #2b2b2e 50%, #4b4b4f 82%, #8a8a8e 100%);
+  box-shadow: 0 0 0 1.5px #1c1c1e inset, 0 40px 80px -20px rgba(0, 0, 0, 0.45), 0 12px 28px -8px rgba(0, 0, 0, 0.3);
+}
+.iphone-bezel { position: absolute; inset: 5px; border-radius: 63px; background: #000; box-shadow: 0 0 0 1px #0a0a0a; }
+.iphone-screen { position: absolute; left: 14px; top: 14px; width: 390px; height: 844px; border-radius: 55px; overflow: hidden; background: #fff; isolation: isolate; }
+.iphone-screen iframe { width: 390px; height: 844px; border: 0; display: block; background: transparent; }
+.iphone-island { position: absolute; left: 50%; top: 11px; width: 124px; height: 36px; margin-left: -62px; border-radius: 20px; background: #000; z-index: 3; pointer-events: none; }
+.iphone-island::after { content: ''; position: absolute; right: 14px; top: 11px; width: 13px; height: 13px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #1d2a45 0%, #0b0f1a 60%, #000 100%); }
+.iphone-status { position: absolute; left: 0; right: 0; top: 0; height: 54px; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 6px 30px 0 40px; pointer-events: none; color: #000;
+  font-family: -apple-system, 'SF Pro Text', BlinkMacSystemFont, system-ui, sans-serif; font-weight: 600; font-size: 17px; letter-spacing: -0.2px; }
+.iphone-status-right { display: flex; align-items: center; gap: 7px; }
+.iphone-home { position: absolute; left: 50%; bottom: 8px; width: 139px; height: 5px; margin-left: -69.5px; border-radius: 3px; background: #000; z-index: 3; pointer-events: none; }
+.iphone-btn { position: absolute; width: 4px; border-radius: 2px; background: linear-gradient(90deg, #3a3a3d, #6a6a6e); }
+.iphone-glare { position: absolute; inset: 14px; border-radius: 55px; pointer-events: none; z-index: 4; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06); }

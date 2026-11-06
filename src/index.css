@@ -1,0 +1,88 @@
+@import "@tattva/ui/tokens.css";
+@source "../node_modules/@tattva/ui/dist";
+
+
+/* iOS behaviours: no tap flash, no text-selection callouts on controls, no double-tap zoom, no pointer cursor (iOS has no hover),
+   and no page bounce behind the app. The system font is used so the app matches the device it sits in. */
+html, body { overscroll-behavior: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+button, [role="button"], label { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+html[data-ios] * { cursor: default !important; }
+html[data-ios] textarea, html[data-ios] input { cursor: text !important; }
+html[data-ios] { --font-sans: -apple-system, 'SF Pro Text', BlinkMacSystemFont, system-ui, sans-serif; }
+
+/* iOS behaviours: no tap flash, no text-selection callouts on controls, no double-tap zoom, no pointer cursor (iOS has no hover),
+   and no page bounce behind the app. The system font is used so the app matches the device it sits in. */
+html, body { overscroll-behavior: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+button, [role="button"], label { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+html[data-ios] * { cursor: default !important; }
+html[data-ios] textarea, html[data-ios] input { cursor: text !important; }
+html[data-ios] { --font-sans: -apple-system, 'SF Pro Text', BlinkMacSystemFont, system-ui, sans-serif; }
+
+/* Glass (iOS 26 "Liquid Glass"): translucent surfaces that blur and saturate whatever scrolls beneath them, with a thin light
+   edge. Built only from Tattva colour tokens mixed with transparency. */
+.glass {
+  background-color: color-mix(in srgb, var(--color-bg) 60%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.04);
+  backdrop-filter: blur(24px) saturate(180%) brightness(1.04);
+}
+/* Floating controls (round buttons, pills) are the "lens" pieces. Liquid Glass reads as a thick, clear material, so they get:
+   a more opaque fill (icons stay legible over photos), a soft top-down sheen, a bright specular rim along the top edge, a faint
+   dark hairline all round, and a two-part shadow (tight contact + soft lift). */
+.glass-float {
+  background-color: color-mix(in srgb, var(--color-bg) 82%, transparent);
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--color-surface) 75%, transparent) 0%, transparent 60%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--color-surface) 95%, transparent),
+    inset 0 0 0 0.5px color-mix(in srgb, var(--color-fg) 14%, transparent),
+    inset 0 -1px 2px color-mix(in srgb, var(--color-fg) 8%, transparent),
+    0 1px 2px color-mix(in srgb, var(--color-fg) 18%, transparent),
+    0 10px 24px -10px color-mix(in srgb, var(--color-fg) 38%, transparent);
+}
+.glass-float svg { stroke-width: 2; }
+.glass-float:hover { background-color: color-mix(in srgb, var(--color-bg) 92%, transparent); }
+
+/* Scroll edge, as in the main prototype (after Tattva's ScrollEdge): where content scrolls under a bar, it softens gradually instead of meeting a
+   hard line. Five backdrop-blur layers, each masked to its own band, grow stronger towards the bar; a tint of the page colour sits on top.
+   Decoration only. With reduced transparency, or no backdrop-filter, a plain fade is drawn. */
+.se { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.se[data-edge='top'] { --se-dir: to top; overflow: hidden; transition: bottom 0.2s var(--ease-out); }
+.se[data-edge='bottom'] { --se-dir: to bottom; top: -8px; }
+.se > span { position: absolute; inset: 0; }
+.se-blur > span { position: absolute; inset: 0; }
+.se-b1 { backdrop-filter: blur(0.5px); -webkit-backdrop-filter: blur(0.5px); mask-image: linear-gradient(var(--se-dir), transparent 0%, #000 20%, #000 40%, transparent 60%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 0%, #000 20%, #000 40%, transparent 60%); }
+.se-b2 { backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); mask-image: linear-gradient(var(--se-dir), transparent 20%, #000 40%, #000 60%, transparent 80%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 20%, #000 40%, #000 60%, transparent 80%); }
+.se-b3 { backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); mask-image: linear-gradient(var(--se-dir), transparent 40%, #000 60%, #000 80%, transparent 100%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 40%, #000 60%, #000 80%, transparent 100%); }
+.se-b4 { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); mask-image: linear-gradient(var(--se-dir), transparent 60%, #000 80%, #000 100%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 60%, #000 80%, #000 100%); }
+.se-b5 { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); mask-image: linear-gradient(var(--se-dir), transparent 80%, #000 100%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 80%, #000 100%); }
+.se-tint { background-image: linear-gradient(var(--se-dir), transparent 0%, color-mix(in srgb, var(--bg) 55%, transparent) 100%); }
+.se[data-edge='bottom'] .se-tint { background-image: linear-gradient(var(--se-dir), transparent 0%, color-mix(in srgb, var(--bg) 88%, transparent) 55%, var(--bg) 100%); }
+/* Content under the bar: the bar's own height is nearly opaque, so nothing behind it competes with the title and buttons; it then fades out over 24px below. */
+.se[data-edge='top'][data-solid] .se-tint { background-image: linear-gradient(var(--se-dir), transparent 0px, color-mix(in srgb, var(--bg) 94%, transparent) 24px, color-mix(in srgb, var(--bg) 97%, transparent) 100%); }
+.se-fallback { display: none; background-image: linear-gradient(var(--se-dir), transparent 0%, var(--bg) 100%); }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .se-blur { display: none; } .se-fallback { display: block; } }
+@media (prefers-reduced-transparency: reduce) { .se-blur { display: none; } .se-fallback { display: block; } }
+
+/* Touch targets: every tappable row is at least 44pt tall, as iOS asks. */
+button[aria-expanded]:not([data-slot="button"]) { min-height: 44px; align-items: center; }
+label:has(> input[type="checkbox"]), label:has(input[type="checkbox"]) { min-height: 44px; align-items: center; }
+
+/* Live call: four bars moving at different speeds. Still under reduced motion. */
+.eq { display: inline-flex; align-items: center; gap: 2px; height: 14px; }
+.eq i { width: 2px; height: 100%; border-radius: 1px; background: var(--accent); transform-origin: center; animation: eq 0.9s ease-in-out infinite; }
+.eq i:nth-child(2) { animation-delay: -0.3s; } .eq i:nth-child(3) { animation-delay: -0.6s; } .eq i:nth-child(4) { animation-delay: -0.15s; }
+@keyframes eq { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) { .eq i { animation: none; transform: scaleY(0.6); } }
+
+/* Aurora's spark: Tattva's own AI mark, alive. It swells and tilts like a thought forming, a halo breathes out from it,
+   and two small stars twinkle at different times. No spinning ring. Still under reduced motion. */
+.spark { position: relative; display: grid; place-items: center; flex: none; width: 36px; height: 36px; }
+.spark-disc { position: relative; z-index: 1; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9999px; background: var(--lime-soft); color: var(--fg); }
+.spark-core { animation: spark-core 2.4s ease-in-out infinite; transform-origin: center; }
+.spark-halo { position: absolute; inset: 4px; border-radius: 9999px; background: var(--lime); opacity: 0; animation: spark-halo 2.4s ease-out infinite; }
+.spark-dot { position: absolute; width: 8px; height: 8px; background: var(--lime-hover, var(--lime)); clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); opacity: 0; }
+.spark-dot.d1 { top: -1px; right: -1px; animation: spark-twinkle 2.4s ease-in-out infinite 0.4s; }
+.spark-dot.d2 { bottom: 0; left: -3px; width: 6px; height: 6px; animation: spark-twinkle 2.4s ease-in-out infinite 1.4s; }
+@keyframes spark-core { 0%, 100% { transform: scale(0.9) rotate(-10deg); } 45% { transform: scale(1.25) rotate(8deg); } 70% { transform: scale(1) rotate(0deg); } }
+@keyframes spark-halo { 0% { transform: scale(0.8); opacity: 0.55; } 100% { transform: scale(1.7); opacity: 0; } }
+@keyframes spark-twinkle { 0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); } 40% { opacity: 1; transform: scale(1) rotate(45deg); } 70% { opacity: 0; transform: scale(0.5) rotate(90deg); } }
+@media (prefers-reduced-motion: reduce) { .spark-core, .spark-halo, .spark-dot { animation: none; } .spark-dot { opacity: 0.8; } }
