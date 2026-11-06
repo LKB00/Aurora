@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { AISuggestIcon, SectionLabel } from '@tattva/ui'
 import worldDots from '../assets/world-dots.svg'
 import auroraMark from '../assets/aurora-mark.png'
-import { SCENARIOS } from '../data/scenarios'
+import { DEFAULT_SCENARIO, SCENARIOS } from '../data/scenarios'
 import { useApp } from '../state/store'
 import { ChatInput } from '../ui/ChatInput'
 import { DemoButton } from '../ui/Demo'
@@ -56,13 +56,16 @@ export function Start() {
             ))}
           </ul>
         </section>
-        <ChatInput
-          key={pickedId ?? 'empty'}
-          placeholder="Ask for anything"
-          initialValue={draft}
-          onSend={() => dispatch({ type: 'BEGIN', id: pickedId ?? undefined })}
-          above={draftPhoto ? <img src={draftPhoto.src} alt={draftPhoto.alt} className="h-16 w-24 rounded-xl object-cover" /> : undefined}
-        />
+        {/* Tapping the empty bar writes the iPhone request into it, so there is always one obvious way in. */}
+        <div onFocusCapture={() => { if (!pickedId) setPickedId(DEFAULT_SCENARIO) }}>
+          <ChatInput
+            key={pickedId ?? 'empty'}
+            placeholder="Ask for anything"
+            initialValue={draft}
+            onSend={() => dispatch({ type: 'BEGIN', id: pickedId ?? undefined })}
+            above={draftPhoto ? <img src={draftPhoto.src} alt={draftPhoto.alt} className="h-16 w-24 rounded-xl object-cover" /> : undefined}
+          />
+        </div>
         <p className="m-0 px-2 text-center text-note leading-4 text-fg-muted">Prototype: nothing calls a real business. Tap a suggestion, then send.</p>
       </footer>
     </div>
