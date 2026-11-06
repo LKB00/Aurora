@@ -55,7 +55,7 @@ export function Results() {
                 </p>
               )}
             </section>
-            {deadEnd && <Recovery />}
+            {deadEnd && <Recovery inside />}
           </div>
         </Reveal>
 

@@ -1,6 +1,7 @@
 // A follow-up call, in four honest steps: choose what to ask, approve it, watch it happen, see exactly what changed.
 // The call is simulated. Nothing starts until the person approves.
-import { ApprovalPrompt, Badge, Button, Callout, Checkbox, ApproveIcon, FactList, Receipt, SectionLabel, StatusTicker, WorkingEdge } from '@tattva/ui'
+import { ApprovalPrompt, Badge, Button, Checkbox, ApproveIcon, FactList, Receipt, SectionLabel, StatusTicker, WorkingEdge } from '@tattva/ui'
+import { Notice } from '../ui/Notice'
 import { contactText } from '../logic/contact'
 import { unresolved } from '../logic/evaluate'
 import { shortName } from '../logic/format'
@@ -21,7 +22,7 @@ export function FollowUp({ id }: { id: string }) {
   const b = d.businesses.find((x) => x.business.id === id)
   const leave = () => { dispatch({ type: 'FU_CLOSE' }); nav.back() }
   if (!fu || fu.businessId !== id || !b) {
-    return <Screen title="Follow-up"><div className="p-4"><Callout tone="info" title="No follow-up in progress"><Button size="lg" onClick={nav.back}>Go back</Button></Callout></div></Screen>
+    return <Screen title="Follow-up"><div className="p-4"><Notice tone="info" title="No follow-up in progress"><Button size="lg" onClick={nav.back}>Go back</Button></Notice></div></Screen>
   }
   const name = shortName(b.business.name)
   const open = unresolved(b.views)
@@ -147,11 +148,11 @@ export function FollowUp({ id }: { id: string }) {
   return (
     <Screen title={`Result · ${name}`} subtitle="Follow-up call" back={false} footer={<div className="flex flex-col gap-2"><Button size="lg" className="w-full" onClick={done}>See {name}</Button>{r && !r.cancelled && <Button size="lg" variant="secondary" className="w-full" onClick={() => dispatch({ type: 'FU_RETRY' })}>Ask again</Button>}</div>}>
       <div className="flex flex-col gap-8 px-4 py-4">
-        {r?.cancelled && <Callout tone="info" title="You cancelled the call">Nothing changed. Everything Aurora knew before is still here.</Callout>}
+        {r?.cancelled && <Notice tone="info" title="You cancelled the call">Nothing changed. Everything Aurora knew before is still here.</Notice>}
         {r && !r.cancelled && noInfo && (
-          <Callout tone="warning" title={OUTCOME[r.outcome] ?? 'The call didn’t settle anything'}>
+          <Notice tone="warning" title={OUTCOME[r.outcome] ?? 'The call didn’t settle anything'}>
             Nothing about your requirements changed, and nothing was marked as not met. A call that doesn’t get an answer isn’t a no.
-          </Callout>
+          </Notice>
         )}
         {r && !r.cancelled && !noInfo && (
           <>

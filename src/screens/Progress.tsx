@@ -1,7 +1,8 @@
 // What Aurora did. Reads the same state as the chat, so the two can never disagree.
 // Order is by what the person needs: the conclusion, then how each of their must-haves came out, then store by store,
 // and only then the process (numbers, steps, the full activity log).
-import { ActivityTrace, ApproveIcon, Badge, Button, Callout, GlobeIcon, MicIcon, NeedsReviewIcon, SectionLabel, ThoughtIcon, XIcon } from '@tattva/ui'
+import { ActivityTrace, ApproveIcon, Badge, Button, GlobeIcon, MicIcon, NeedsReviewIcon, SectionLabel, ThoughtIcon, XIcon } from '@tattva/ui'
+import { Notice } from '../ui/Notice'
 import { useState, type ReactNode } from 'react'
 import { buildMilestones, synthesis, verdictLine, type Activity } from '../logic/agent'
 import { contactText } from '../logic/contact'
@@ -115,12 +116,12 @@ export function Progress() {
     <Screen title="What Aurora did" subtitle={d.scenario.request.title} actions={<DemoButton />}>
       <div className="flex flex-col gap-8 px-4 py-4">
         {d.timeline.note && (
-          <Callout tone={d.process === 'failed' ? 'danger' : d.process === 'interrupted' ? 'warning' : 'info'} title={d.process === 'failed' ? 'This search couldn’t run' : d.process === 'interrupted' ? 'The search paused' : 'Search stopped'}>
+          <Notice tone={d.process === 'failed' ? 'danger' : d.process === 'interrupted' ? 'warning' : 'info'} title={d.process === 'failed' ? 'This search couldn’t run' : d.process === 'interrupted' ? 'The search paused' : 'Search stopped'}>
             {d.timeline.note}
             <div className="mt-2 flex gap-2">
               {(d.process === 'interrupted' || d.process === 'cancelled') && <Button size="lg" onClick={() => dispatch({ type: 'RESUME' })}>Resume search</Button>}
             </div>
-          </Callout>
+          </Notice>
         )}
         {d.process === 'failed' && <Recovery />}
 
@@ -217,7 +218,7 @@ export function Progress() {
           <ActivityTrace steps={trace} summary={`${trace.length} steps${d.running ? ' so far' : ''}`} streaming={d.running} defaultOpen={!d.evaluated} actorLabels={{ ai: 'Aurora', rule: 'Rule' }} />
         </Section>
 
-        {d.scenario.countsNote && <Callout tone="info" title="About these counts">{d.scenario.countsNote}</Callout>}
+        {d.scenario.countsNote && <Notice tone="info" title="About these counts">{d.scenario.countsNote}</Notice>}
         {d.scenario.listedNote && d.scenario.listed.length > 0 && (
           <Section label="Also in Aurora’s list">
             <p className="m-0 text-note text-fg-muted">{d.scenario.listedNote}</p>

@@ -1,6 +1,7 @@
 // Proof for one business: what it said against each of your requirements, where that came from and how old it is.
 import { useState } from 'react'
-import { Badge, Button, Callout, CallRecord, ClaimCheck, Collapsible, DataFreshness, GlobeIcon, SectionLabel, ShareIcon } from '@tattva/ui'
+import { Badge, Button, CallRecord, ClaimCheck, Collapsible, DataFreshness, GlobeIcon, SectionLabel, ShareIcon } from '@tattva/ui'
+import { Notice } from '../ui/Notice'
 import { LocationIcon } from '../ui/LocationIcon'
 import type { CallRecord as Call } from '../types'
 import { basisOf, BASIS_LABEL, verdictLine, whyShown } from '../logic/agent'
@@ -151,7 +152,7 @@ export function Business({ id }: { id: string }) {
             {b.business.address && <p className="m-0 text-body text-fg-muted">{b.business.address}</p>}
             {b.business.rating && <p className="m-0 text-note text-fg-muted">★ {b.business.rating.value} · {b.business.rating.note}</p>}
           </div>
-          {b.business.addressDiscrepancy && <Callout tone="warning" title="Location differs between sources">{b.business.addressDiscrepancy}</Callout>}
+          {b.business.addressDiscrepancy && <Notice tone="warning" title="Location differs between sources">{b.business.addressDiscrepancy}</Notice>}
           <div className={`grid gap-2 ${b.business.website ? 'grid-cols-3' : 'grid-cols-2'}`}>
             <Button size="lg" variant="secondary" onClick={() => window.open(directionsUrl, '_blank', 'noopener')}><LocationIcon width={16} height={16} />Directions</Button>
             <Button size="lg" variant="secondary" onClick={share}><ShareIcon width={16} height={16} />{copied ? 'Link copied' : 'Share'}</Button>
@@ -172,9 +173,9 @@ export function Business({ id }: { id: string }) {
         </section>
 
         {conditions.length > 0 && (
-          <Callout tone="info" title="Conditions that change the answer">
+          <Notice tone="info" title="Conditions that change the answer">
             <ul className="list-disc pl-5">{conditions.map((c) => <li key={c.condition}><strong className="font-medium">{c.requirement}:</strong> {c.condition}</li>)}</ul>
-          </Callout>
+          </Notice>
         )}
 
         <section aria-label="Your request, checked" className="flex flex-col gap-1">

@@ -1,5 +1,6 @@
 // Side by side, against your requirements. It never picks a winner — Aurora's rank and match score are not used here.
-import { Button, Callout, ComparisonTable, EmptyState } from '@tattva/ui'
+import { Button, ComparisonTable, EmptyState } from '@tattva/ui'
+import { Notice } from '../ui/Notice'
 import { contactText } from '../logic/contact'
 import { shortName } from '../logic/format'
 import { useApp, useNav } from '../state/store'
@@ -45,7 +46,7 @@ export function Compare() {
   return (
     <Screen title="Compare" subtitle={`${shown.length} businesses · against your request`} actions={<DemoButton />}>
       <div className="flex flex-col gap-8 px-4 py-4">
-        <Callout tone="info" title="No winner is picked">Aurora’s rank and match score aren’t used here. Unknown means nobody has said — not that it’s a no.</Callout>
+        <Notice tone="info" title="No winner is picked">Aurora’s rank and match score aren’t used here. Unknown means nobody has said — not that it’s a no.</Notice>
         <ComparisonTable
           caption="Your requirements, business by business"
           attributeLabel="Requirement"

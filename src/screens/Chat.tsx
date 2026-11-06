@@ -1,7 +1,8 @@
 // The conversation: the request, what Aurora is doing, the outcome, and a way to ask about the search.
 import { createPortal } from 'react-dom'
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import { AIDisclosure, AISuggestIcon, ApproveIcon, Button, Callout, ChevronIcon, FactList, Message, MessageList, MicOffIcon, NeedsReviewIcon, PlanIcon, SectionLabel, StatusTicker, StepTimeline, ThoughtIcon, WorkingEdge, XIcon } from '@tattva/ui'
+import { AIDisclosure, AISuggestIcon, ApproveIcon, Button, ChevronIcon, FactList, Message, MessageList, MicOffIcon, NeedsReviewIcon, PlanIcon, SectionLabel, StatusTicker, StepTimeline, ThoughtIcon, WorkingEdge, XIcon } from '@tattva/ui'
+import { Notice } from '../ui/Notice'
 import { buildMilestones, needsAttention, verdictLine } from '../logic/agent'
 import { outcomeCopy, suggestedBusiness } from '../logic/copy'
 import { inr, lc, shortName } from '../logic/format'
@@ -164,9 +165,9 @@ function Progress() {
   return (
     <div className="flex flex-col gap-3">
       {d.timeline.note && (
-        <Callout tone={d.process === 'failed' ? 'danger' : d.process === 'interrupted' ? 'warning' : 'info'} title={d.process === 'failed' ? 'This search couldn’t run' : d.process === 'interrupted' ? 'The search paused' : 'Search stopped'}>
+        <Notice tone={d.process === 'failed' ? 'danger' : d.process === 'interrupted' ? 'warning' : 'info'} title={d.process === 'failed' ? 'This search couldn’t run' : d.process === 'interrupted' ? 'The search paused' : 'Search stopped'}>
           {d.timeline.note}
-        </Callout>
+        </Notice>
       )}
       <StepTimeline steps={steps} />
       <div className="flex flex-wrap gap-2">
@@ -237,7 +238,7 @@ function Answer() {
           <p className="m-0 mt-1 text-body leading-5 text-fg"><strong className="font-semibold">{shortName(finding.business.business.name)}:</strong> {finding.reason}</p>
         </div>
       )}
-      {d.scenario.recovery && <div className="px-4 pb-4"><Recovery /></div>}
+      {d.scenario.recovery && <div className="px-4 pb-4 pl-[68px]"><Recovery inside /></div>}
       {n > 0 && (
         <div className="border-t border-line p-3">
           <Button size="lg" variant={best ? 'secondary' : 'primary'} className="w-full" onClick={() => nav.push({ name: 'results' })}>{n === 1 ? 'See the business' : `See all ${n} businesses`}</Button>
