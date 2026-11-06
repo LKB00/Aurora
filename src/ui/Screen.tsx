@@ -20,7 +20,7 @@ function Fade({ edge, style, solid }: { edge: 'top' | 'bottom'; style?: React.CS
 
 // iOS navigation bar + large title: the bar is 44pt with a "‹ Previous" back button; the large title lives at the top of the
 // content and, once it scrolls away, the bar's own small title fades in and a hairline appears under the bar (scroll edge).
-export function Screen({ title, subtitle, back = true, actions, footer, hero, children }: { title: string; subtitle?: string; back?: boolean; actions?: ReactNode; footer?: ReactNode; /** Full-bleed picture at the very top; the glass buttons float over it. */ hero?: ReactNode; children: ReactNode }) {
+export function Screen({ title, subtitle, back = true, onBack, backLabel: backLabelOverride, actions, footer, hero, children }: { title: string; subtitle?: string; back?: boolean; /** Replaces the default "go back one screen". */ onBack?: () => void; backLabel?: string; actions?: ReactNode; footer?: ReactNode; /** Full-bleed picture at the very top; the glass buttons float over it. */ hero?: ReactNode; children: ReactNode }) {
   const nav = useNav()
   const { backLabel, sheet } = useLayer()
   const [scrolled, setScrolled] = useState(false)
@@ -85,7 +85,7 @@ export function Screen({ title, subtitle, back = true, actions, footer, hero, ch
         <Fade edge="top" solid={!hero || scrolled} style={{ bottom: hero && !scrolled ? `calc(${base}px - 20px * ${sheet ? 'var(--p, 0)' : '1'})` : scrolled ? -24 : 0, ['--se-solid' as string]: hero && !scrolled ? '100%' : '30%' }} />
         <div className="flex size-11 items-center justify-center">
           {back && !sheet && (
-            <Button size="lg" variant="ghost" onClick={nav.back} aria-label={`Back to ${backLabel}`} className="glass glass-float size-11 rounded-full p-0 text-fg">
+            <Button size="lg" variant="ghost" onClick={onBack ?? nav.back} aria-label={`Back to ${backLabelOverride ?? backLabel}`} className="glass glass-float size-11 rounded-full p-0 text-fg">
               <ChevronIcon width={20} height={20} className="rotate-180" />
             </Button>
           )}

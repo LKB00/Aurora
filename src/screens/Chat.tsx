@@ -358,7 +358,8 @@ export function Chat() {
     <Screen
       title={req.title}
       subtitle={req.location}
-      back={false}
+      onBack={() => dispatch({ type: 'HOME' })}
+      backLabel="Home"
       actions={<DemoButton />}
       footer={
         <div className="flex flex-col gap-2">
