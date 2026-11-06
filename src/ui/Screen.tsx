@@ -31,6 +31,42 @@ export function Screen({ title, subtitle, back = true, onBack, backLabel: backLa
   const wrap = useRef<HTMLDivElement>(null)
   // The scrolling element, found by its role.
   const scroller = () => wrap.current?.querySelector<HTMLElement>('[role=region]') ?? null
+  // Scroll feel for a mouse wheel. A wheel jumps in coarse steps with no weight, so a flick throws the page to the end. Here each notch only nudges a target,
+  // and the page eases toward it (about 0.14 of the remaining distance per frame): it starts quickly, then settles, like momentum with friction.
+  // A trackpad already has its own momentum, so it is left alone. A sheet at medium height needs a deliberate push (about 80px of wheel) before it grows.
+  const stateRef = useRef({ target: 0, raf: 0, acc: 0, t: 0 })
+  const sheetRef = useRef(sheet)
+  sheetRef.current = sheet
+  useEffect(() => {
+    const el = scroller()
+    if (!el) return
+    const st = stateRef.current
+    const step = () => {
+      const max = el.scrollHeight - el.clientHeight
+      st.target = Math.max(0, Math.min(max, st.target))
+      const diff = st.target - el.scrollTop
+      if (Math.abs(diff) < 0.5) { el.scrollTop = st.target; st.raf = 0; return }
+      el.scrollTop += diff * 0.14
+      st.raf = requestAnimationFrame(step)
+    }
+    const onWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || e.deltaY === 0) return
+      const sh = sheetRef.current
+      if (sh?.detent === 'medium') {
+        e.preventDefault()
+        if (e.deltaY > 0) { st.acc = e.timeStamp - st.t > 300 ? e.deltaY : st.acc + e.deltaY; st.t = e.timeStamp; if (st.acc > 80) { st.acc = 0; sh.expand() } }
+        return
+      }
+      const coarse = e.deltaMode !== 0 || (Math.abs(e.deltaY) >= 50 && Number.isInteger(e.deltaY))
+      if (!coarse) { st.target = el.scrollTop; return }
+      e.preventDefault()
+      if (!st.raf) st.target = el.scrollTop
+      st.target += (e.deltaMode === 1 ? e.deltaY * 32 : e.deltaY) * 0.9
+      if (!st.raf) st.raf = requestAnimationFrame(step)
+    }
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => { el.removeEventListener('wheel', onWheel); cancelAnimationFrame(st.raf); st.raf = 0 }
+  }, [])
   // Back at medium height the sheet starts from its top again.
   useEffect(() => { if (sheet?.detent === 'medium') { scroller()?.scrollTo({ top: 0 }); setScrolled(false); setCollapsed(false) } }, [sheet?.detent])
   useEffect(() => {
@@ -53,7 +89,6 @@ export function Screen({ title, subtitle, back = true, onBack, backLabel: backLa
         className="absolute inset-0"
         // In a sheet, the first upward swipe or scroll at medium height grows the sheet; the content only scrolls once it is full.
         // A downward swipe from the very top of a full sheet brings it back to medium (the iOS behaviour).
-        onWheel={(e) => { if (sheet?.detent === 'medium' && e.deltaY > 0) sheet.expand() }}
         onTouchStart={(e) => { touchY.current = e.touches[0].clientY }}
         onTouchMove={(e) => {
           if (!sheet) return
