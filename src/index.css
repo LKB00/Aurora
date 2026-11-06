@@ -38,18 +38,15 @@ html[data-ios] { --font-sans: -apple-system, 'SF Pro Text', BlinkMacSystemFont, 
    Decoration only. With reduced transparency, or no backdrop-filter, a plain fade is drawn. */
 .se { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
 .se[data-edge='top'] { --se-dir: to top; overflow: hidden; transition: bottom 0.2s var(--ease-out); }
-.se[data-edge='bottom'] { --se-dir: to bottom; top: -8px; }
+.se[data-edge='bottom'] { --se-dir: to bottom; top: 0; }
 .se > span { position: absolute; inset: 0; }
 .se-blur > span { position: absolute; inset: 0; }
-.se-b1 { backdrop-filter: blur(0.5px); -webkit-backdrop-filter: blur(0.5px); mask-image: linear-gradient(var(--se-dir), transparent 0%, #000 20%, #000 40%, transparent 60%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 0%, #000 20%, #000 40%, transparent 60%); }
-.se-b2 { backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); mask-image: linear-gradient(var(--se-dir), transparent 20%, #000 40%, #000 60%, transparent 80%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 20%, #000 40%, #000 60%, transparent 80%); }
-.se-b3 { backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); mask-image: linear-gradient(var(--se-dir), transparent 40%, #000 60%, #000 80%, transparent 100%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 40%, #000 60%, #000 80%, transparent 100%); }
-.se-b4 { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); mask-image: linear-gradient(var(--se-dir), transparent 60%, #000 80%, #000 100%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 60%, #000 80%, #000 100%); }
-.se-b5 { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); mask-image: linear-gradient(var(--se-dir), transparent 80%, #000 100%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 80%, #000 100%); }
-.se-tint { background-image: linear-gradient(var(--se-dir), transparent 0%, color-mix(in srgb, var(--bg) 55%, transparent) 100%); }
-.se[data-edge='bottom'] .se-tint { background-image: linear-gradient(var(--se-dir), transparent 0%, color-mix(in srgb, var(--bg) 88%, transparent) 55%, var(--bg) 100%); }
+.se-b1, .se-b2, .se-b3, .se-b4 { display: none; }
+.se-b5 { backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); mask-image: linear-gradient(var(--se-dir), transparent 0%, rgb(0 0 0 / 0.06) 20%, rgb(0 0 0 / 0.25) 45%, rgb(0 0 0 / 0.6) 72%, #000 100%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 0%, rgb(0 0 0 / 0.06) 20%, rgb(0 0 0 / 0.25) 45%, rgb(0 0 0 / 0.6) 72%, #000 100%); }
+.se-tint { background-image: linear-gradient(var(--se-dir), transparent 0%, color-mix(in srgb, var(--bg) 8%, transparent) 25%, color-mix(in srgb, var(--bg) 30%, transparent) 55%, color-mix(in srgb, var(--bg) 55%, transparent) 100%); }
+.se[data-edge='bottom'] .se-tint { background-image: linear-gradient(var(--se-dir), transparent 0%, color-mix(in srgb, var(--bg) 10%, transparent) 25%, color-mix(in srgb, var(--bg) 45%, transparent) 60%, color-mix(in srgb, var(--bg) 85%, transparent) 100%); }
 /* Content under the bar: the bar's own height is nearly opaque, so nothing behind it competes with the title and buttons; it then fades out over 24px below. */
-.se[data-edge='top'][data-solid] .se-tint { background-image: linear-gradient(var(--se-dir), transparent 0px, color-mix(in srgb, var(--bg) 94%, transparent) 24px, color-mix(in srgb, var(--bg) 97%, transparent) 100%); }
+.se[data-edge='top'][data-solid] .se-tint { background-image: linear-gradient(var(--se-dir), transparent 0px, color-mix(in srgb, var(--bg) 95%, transparent) 14px, color-mix(in srgb, var(--bg) 98%, transparent) 100%); }
 .se-fallback { display: none; background-image: linear-gradient(var(--se-dir), transparent 0%, var(--bg) 100%); }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .se-blur { display: none; } .se-fallback { display: block; } }
 @media (prefers-reduced-transparency: reduce) { .se-blur { display: none; } .se-fallback { display: block; } }

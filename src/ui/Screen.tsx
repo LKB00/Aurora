@@ -117,7 +117,7 @@ export function Screen({ title, subtitle, back = true, onBack, backLabel: backLa
       </div>
       <header className={`isolate absolute inset-x-0 top-0 z-10 grid grid-cols-[auto_1fr_auto] gap-2 px-3 ${sheet ? 'items-start' : 'items-center'}`} style={{ height: `calc(${base}px + ${inset})`, paddingTop: sheet ? `calc(12px + ${inset})` : inset }}>
         {/* At rest nothing is under the bar, so nothing is softened (and over a photo there is no fade at all). Once content scrolls under it, the fade reaches 36px below the bar. */}
-        <Fade edge="top" solid={!hero || scrolled} style={{ bottom: hero && !scrolled ? `calc(${base}px - 20px * ${sheet ? 'var(--p, 0)' : '1'})` : scrolled ? -24 : 0, ['--se-solid' as string]: hero && !scrolled ? '100%' : '30%' }} />
+        <Fade edge="top" solid={!hero || scrolled} style={{ bottom: hero && !scrolled ? `calc(${base}px - 20px * ${sheet ? 'var(--p, 0)' : '1'})` : scrolled ? -12 : 0, ['--se-solid' as string]: hero && !scrolled ? '100%' : '30%' }} />
         <div className="flex size-11 items-center justify-center">
           {back && !sheet && (
             <Button size="lg" variant="ghost" onClick={onBack ?? nav.back} aria-label={`Back to ${backLabelOverride ?? backLabel}`} className="glass glass-float size-11 rounded-full p-0 text-fg">
@@ -141,7 +141,7 @@ export function Screen({ title, subtitle, back = true, onBack, backLabel: backLa
         </div>
       )}
       {footer && (
-        <footer ref={footerRef} className="pointer-events-none isolate absolute inset-x-0 bottom-0 z-10 px-4 pt-6 pb-(--safe-bottom) [&>*]:pointer-events-auto"><Fade edge="bottom" />{footer}</footer>
+        <footer ref={footerRef} className="pointer-events-none isolate absolute inset-x-0 bottom-0 z-10 px-4 pt-4 pb-(--safe-bottom) [&>*]:pointer-events-auto"><Fade edge="bottom" />{footer}</footer>
       )}
     </div>
   )
