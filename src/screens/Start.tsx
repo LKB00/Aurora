@@ -12,8 +12,8 @@ import { LocationIcon } from '../ui/LocationIcon'
 
 const TRY = [
   { id: 'iphone-live', text: 'Find an iPhone 17 Pro in stock near me' },
-  { id: 'dentist', text: 'Book a dental cleaning this week' },
-  { id: 'plumbing', text: 'Find a plumber for a leak today' },
+  { id: 'dentist-live', text: 'Book a dental cleaning this week' },
+  { id: 'plumbing-live', text: 'Find a plumber for a leak today' },
 ]
 
 export function Start() {

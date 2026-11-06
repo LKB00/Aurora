@@ -1,6 +1,16 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <script>
+      // After a redeploy, a cached page can point at files that no longer exist. Reload once, bypassing the cache.
+      addEventListener('error', function (e) {
+        var t = e.target
+        if (!t || (t.tagName !== 'LINK' && t.tagName !== 'SCRIPT')) return
+        try { if (sessionStorage.getItem('aurora-reloaded')) return; sessionStorage.setItem('aurora-reloaded', '1') } catch (_) { return }
+        location.replace(location.pathname + '?v=' + Date.now() + location.hash)
+      }, true)
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Aurora · Experiment</title>

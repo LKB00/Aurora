@@ -92,6 +92,24 @@ const notContactedTimeline: TimelineStep[] = [
   I.iphoneTimeline[4],
 ]
 
+/** The observed dentist/plumbing result, reached through a simulated live search: same businesses and evidence, paced in stages. */
+function liveFrom(base: Scenario, id: string, where: string): Scenario {
+  const last = base.timeline[base.timeline.length - 1]
+  return {
+    ...base, id, name: base.name.replace(' · ', ' · live search · '), intro: true, isSimulatedSearch: true,
+    description: 'Watch the search run stage by stage, then land on the observed result.',
+    simulatedNote: 'The pacing of this search is simulated. The businesses and answers are the ones Aurora returned. Follow-up calls return scripted, simulated answers.',
+    businesses: base.businesses.map((b, i) => ({ ...b, revealStep: [2, 2, 3][i % 3] })),
+    timeline: [
+      step('discovering', ['active', `Searching maps and websites near ${where}`], ['pending', 'Starts when businesses are found'], ['pending', 'Waiting for answers']),
+      step('contacting', ['done', 'Businesses found'], ['active', 'Calls under way'], ['pending', 'Waiting for answers']),
+      step('contacting', ['done', 'Businesses found'], ['active', 'First answers are in'], ['pending', 'Waiting for calls to finish']),
+      step('evaluating', ['done', 'Businesses found'], ['done', 'Calls completed'], ['active', 'Checking answers against your request']),
+      last,
+    ],
+  }
+}
+
 export const SCENARIOS: Scenario[] = [
   iphoneBase({
     id: 'iphone-live', group: 'Observed journeys', name: 'iPhone 17 Pro · live search', intro: true,
@@ -239,6 +257,11 @@ export const SCENARIOS: Scenario[] = [
     },
   }),
 ]
+
+SCENARIOS.push(
+  liveFrom(SCENARIOS.find((x) => x.id === 'dentist')!, 'dentist-live', 'Kanakapura Road'),
+  liveFrom(SCENARIOS.find((x) => x.id === 'plumbing')!, 'plumbing-live', 'Sector 3'),
+)
 
 export const DEFAULT_SCENARIO = 'iphone-live'
 export const getScenario = (id: string) => SCENARIOS.find((s) => s.id === id) ?? SCENARIOS[0]

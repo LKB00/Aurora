@@ -109,7 +109,7 @@ export function Progress() {
   const stores = useLimited(d.businesses)
   const listed = useLimited(d.scenario.listed)
   const rank = useLimited(ranked)
-  const scope = [found != null && `Aurora found ${found} stores`, reached != null && `reached ${reached}`].filter(Boolean).join(' and ')
+  const scope = [found != null && `Aurora found ${found} businesses`, reached != null && `reached ${reached}`].filter(Boolean).join(' and ')
 
   return (
     <Screen title="What Aurora did" subtitle={d.scenario.request.title} actions={<DemoButton />}>

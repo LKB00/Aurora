@@ -67,7 +67,7 @@ function ChatActionButton({ a }: { a: ChatAction }) {
   return <Button size="lg" variant="secondary" onClick={run}>{a.label}</Button>
 }
 
-const STEP_TEXT: Record<string, string> = { understand: 'Reading your request', discover: 'Finding stores', contact: 'Calling stores', evaluate: 'Comparing answers' }
+const STEP_TEXT: Record<string, string> = { understand: 'Reading your request', discover: 'Finding businesses', contact: 'Calling businesses', evaluate: 'Comparing answers' }
 
 // The live search. Aurora narrates what it is doing, then shows what has come back that matters to you: who has it, who offered
 // something different, who didn't pick up. Never a list of every store, so it reads the same for 3 stores or 50.
@@ -90,8 +90,8 @@ function LiveSearch() {
   const noPickup = att.filter((a) => a.kind === 'no_contact').length
   const sofar = [offeredOther && `${offeredOther} offered something different`, noPickup && `${noPickup} didn’t pick up`].filter(Boolean).join(', ')
   const narration =
-    stepId === 'discover' ? `Searching maps and websites near ${where} for stores that may have the ${d.scenario.request.title.replace(/^Apple /, '')}…`
-    : stepId === 'contact' ? `${foundN ? `I found ${foundN} stores. ` : ''}I’m calling them to check ${musts.length ? musts.join(', ') : 'stock and price'}.${sofar ? ` So far, ${sofar}.` : ''}`
+    stepId === 'discover' ? `Searching maps and websites near ${where} for businesses that may offer the ${d.scenario.request.title.replace(/^Apple /, '')}…`
+    : stepId === 'contact' ? `${foundN ? `I found ${foundN} businesses. ` : ''}I’m calling them to check ${musts.length ? musts.join(', ') : 'stock and price'}.${sofar ? ` So far, ${sofar}.` : ''}`
     : stepId === 'evaluate' ? `The calls are in. I’m checking what each store told me against your ${musts.length} must-haves.`
     : 'Reading your request…'
 
@@ -135,7 +135,7 @@ function LiveSearch() {
         {foundN > 0 && stepId === 'contact' && (
           <div className="flex flex-col gap-1.5">
             <div className="flex items-baseline justify-between text-note text-fg-muted">
-              <span><span className="font-medium text-fg tabular-nums">{called.length}</span> of {foundN} stores called</span>
+              <span><span className="font-medium text-fg tabular-nums">{called.length}</span> of {foundN} businesses called</span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full bg-sunken" aria-hidden><div className="h-full rounded-full bg-accent transition-[width] duration-(--dur-spring) ease-(--ease-spring)" style={{ width: `${Math.max(2, (called.length / foundN) * 100)}%` }} /></div>
           </div>
