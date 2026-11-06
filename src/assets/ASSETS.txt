@@ -1,0 +1,3 @@
+
+world-dots.svg: land outline from Natural Earth via world-atlas 2.0.2 (public domain), turned into a dot grid.
+aurora-mark.png: the Aurora logo, cut from the live app screenshots in the assignment materials (not redrawn).

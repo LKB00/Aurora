@@ -1,6 +1,7 @@
 // Proof for one business: what it said against each of your requirements, where that came from and how old it is.
 import { useState } from 'react'
-import { Badge, Button, Callout, CallRecord, ClaimCheck, Collapsible, DataFreshness, GlobeIcon, PinIcon, SectionLabel, ShareIcon } from '@tattva/ui'
+import { Badge, Button, Callout, CallRecord, ClaimCheck, Collapsible, DataFreshness, GlobeIcon, SectionLabel, ShareIcon } from '@tattva/ui'
+import { LocationIcon } from '../ui/LocationIcon'
 import type { CallRecord as Call } from '../types'
 import { basisOf, BASIS_LABEL, verdictLine, whyShown } from '../logic/agent'
 import { contactText } from '../logic/contact'
@@ -143,7 +144,7 @@ export function Business({ id }: { id: string }) {
           <div className="flex flex-col gap-1">
             {dist != null && (
               <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="relative inline-flex items-center gap-1.5 self-start text-body font-medium text-accent before:absolute before:-inset-2.5 before:content-['']">
-                <PinIcon width={16} height={16} />
+                <LocationIcon width={16} height={16} />
                 {dist.toFixed(1)} km away
               </a>
             )}
@@ -152,7 +153,7 @@ export function Business({ id }: { id: string }) {
           </div>
           {b.business.addressDiscrepancy && <Callout tone="warning" title="Location differs between sources">{b.business.addressDiscrepancy}</Callout>}
           <div className={`grid gap-2 ${b.business.website ? 'grid-cols-3' : 'grid-cols-2'}`}>
-            <Button size="lg" variant="secondary" onClick={() => window.open(directionsUrl, '_blank', 'noopener')}><PinIcon width={16} height={16} />Directions</Button>
+            <Button size="lg" variant="secondary" onClick={() => window.open(directionsUrl, '_blank', 'noopener')}><LocationIcon width={16} height={16} />Directions</Button>
             <Button size="lg" variant="secondary" onClick={share}><ShareIcon width={16} height={16} />{copied ? 'Link copied' : 'Share'}</Button>
             {b.business.website && <Button size="lg" variant="secondary" onClick={() => window.open(`https://${b.business.website}`, '_blank', 'noopener')}><GlobeIcon width={16} height={16} />Website</Button>}
           </div>

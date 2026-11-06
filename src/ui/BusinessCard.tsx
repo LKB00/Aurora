@@ -1,5 +1,6 @@
 // One business, judged against the user's must-haves. Built from Tattva's ResultCard: name, a few facts, a tag and one action.
-import { Badge, Button, Checkbox, ChevronIcon, PinIcon } from '@tattva/ui'
+import { Badge, Button, Checkbox, ChevronIcon } from '@tattva/ui'
+import { LocationIcon } from './LocationIcon'
 import type { BusinessView } from '../logic/evaluate'
 import { contactText } from '../logic/contact'
 import { nextAction } from '../logic/copy'
@@ -60,7 +61,7 @@ export function BusinessCard({ b, evaluated = true, primary = false, select }: {
               aria-label={`${dist.toFixed(1)} kilometres away. Open ${b.business.name} in Google Maps`}
               className="relative mt-1 inline-flex items-center gap-1.5 text-body font-medium text-accent before:absolute before:-inset-2.5 before:content-['']"
             >
-              <PinIcon width={16} height={16} />
+              <LocationIcon width={16} height={16} />
               {dist.toFixed(1)} km
             </a>
           )}

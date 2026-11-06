@@ -1,10 +1,12 @@
 // Where the prototype begins: Aurora's landing. "Find anything." over a quiet map of dots, a row of things to try, and the message bar.
 // Tapping the first one writes the request (with its photo) into the bar; sending it starts the story: ask, watch Aurora work, get the answer.
-import { AIMark, PinIcon } from '@tattva/ui'
 import { useState } from 'react'
+import worldDots from '../assets/world-dots.svg'
+import auroraMark from '../assets/aurora-mark.png'
 import { useApp } from '../state/store'
 import { ChatInput } from '../ui/ChatInput'
 import { DemoButton } from '../ui/Demo'
+import { LocationIcon } from '../ui/LocationIcon'
 
 const TRY = [
   { id: 'draft', label: 'iPhone 17 Pro', place: 'Sector 3' },
@@ -20,14 +22,14 @@ export function Start() {
   const pick = (id: string) => (id === 'draft' ? setDraft(req.text) : dispatch({ type: 'LOAD_SCENARIO', id }))
   return (
     <div className="relative flex h-full w-full flex-col overflow-hidden bg-bg text-fg" style={{ paddingTop: 'var(--safe-top, 0px)', paddingBottom: 'var(--safe-bottom, 0px)' }}>
-      {/* A quiet field of dots, brightest in the middle. */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-70 [background-image:radial-gradient(circle,var(--fg-subtle)_1px,transparent_1.6px)] [background-size:11px_11px] [mask-image:radial-gradient(ellipse_70%_45%_at_50%_42%,#000_20%,transparent_75%)] [-webkit-mask-image:radial-gradient(ellipse_70%_45%_at_50%_42%,#000_20%,transparent_75%)]" />
+      {/* The world, as dots, behind the question. Decoration only. */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-[12%] bottom-[24%] bg-fg-subtle opacity-35 [mask-image:var(--map)] [mask-position:48%_center] [mask-repeat:no-repeat] [mask-size:150%_auto] [-webkit-mask-image:var(--map)] [-webkit-mask-position:48%_center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:150%_auto]" style={{ ['--map' as string]: `url(${worldDots})` }} />
 
       <header className="relative z-10 grid grid-cols-[44px_1fr_44px] items-start px-3 pt-3">
         <div className="glass glass-float flex size-11 items-center justify-center rounded-full"><DemoButton /></div>
         <div className="flex flex-col items-center gap-1">
-          <span className="grid size-10 place-items-center rounded-full bg-lime-soft text-fg" aria-hidden><AIMark size={22} /></span>
-          <span className="flex items-center gap-1 text-note leading-4 text-fg-muted"><PinIcon width={13} height={13} />{req.location}</span>
+          <img src={auroraMark} alt="Aurora" className="h-9 w-auto" />
+          <span className="flex items-center gap-1 text-note leading-4 text-fg-muted"><LocationIcon width={14} height={14} />{req.location}</span>
         </div>
         <span />
       </header>
