@@ -1,7 +1,7 @@
 // Aurora's message bar, after the live prototype: a tall pill with a plus on the left, a growing text field, and a mic that turns
 // into a send button once there is text; a round voice orb sits beside it. Built from Tattva tokens and icons.
 import { IconButton, MicIcon, PlusIcon, SendIcon } from '@tattva/ui'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 
 // Aurora's dotted waveform. The orb is decorative here: voice is not part of this prototype.
 const BARS: [number, number, number][] = [[2, 8, 4], [6, 5, 10], [10, 2, 16], [14, 6, 8], [18, 3, 14], [22, 7, 6]]
@@ -16,6 +16,7 @@ function Orb() {
 export function ChatInput({ placeholder = 'Ask for anything', onSend, initialValue = '', above }: { placeholder?: string; onSend: (text: string) => void; /** A message already written, waiting to be sent. */ initialValue?: string; /** Something attached to the message, shown inside the bar above the text. */ above?: React.ReactNode }) {
   const [value, setValue] = useState(initialValue)
   const ref = useRef<HTMLTextAreaElement>(null)
+  const fieldId = useId()
   const [tall, setTall] = useState(false)
   useEffect(() => {
     const el = ref.current
@@ -32,11 +33,12 @@ export function ChatInput({ placeholder = 'Ask for anything', onSend, initialVal
   }
   return (
     <div className="flex items-end gap-2.5">
-      <label className={`flex min-h-14 min-w-0 flex-1 cursor-text items-end gap-3 border border-line bg-surface py-2 pr-2 pl-4 ${above || tall ? 'rounded-3xl' : 'rounded-full'}`}>
+      <label htmlFor={fieldId} className={`flex min-h-14 min-w-0 flex-1 cursor-text items-end gap-3 border border-line bg-surface py-2 pr-2 pl-4 ${above || tall ? 'rounded-3xl' : 'rounded-full'}`}>
         <span className="grid h-10 place-items-center text-fg-muted" aria-hidden><PlusIcon width={24} height={24} /></span>
         <span className="flex min-w-0 flex-1 flex-col gap-2">
         {above}
         <textarea
+          id={fieldId}
           ref={ref}
           rows={1}
           value={value}
