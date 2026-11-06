@@ -346,17 +346,57 @@ function ImageViewer({ image, onClose }: { image: { src: string; alt: string }; 
   )
 }
 
+/** An assistant reply, written out word by word after a short pause, like it is being generated. Replies already there when the screen opens just appear. */
+function Written({ text, animate, onGrow, actions }: { text: string; animate: boolean; onGrow: () => void; actions?: ChatAction[] }) {
+  const words = text.split(' ')
+  const calm = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  const live = animate && !calm
+  const [n, setN] = useState(live ? 0 : words.length)
+  const [thinking, setThinking] = useState(live)
+  useEffect(() => {
+    if (!live) return
+    const t = window.setTimeout(() => setThinking(false), 500)
+    return () => window.clearTimeout(t)
+  }, [live])
+  useEffect(() => {
+    if (!live || thinking || n >= words.length) return
+    const t = window.setTimeout(() => setN((x) => Math.min(words.length, x + 1)), 38)
+    return () => window.clearTimeout(t)
+  }, [live, thinking, n, words.length])
+  useLayoutEffect(() => { onGrow() }, [n, thinking]) // eslint-disable-line react-hooks/exhaustive-deps
+  if (thinking) return <p aria-label="Aurora is writing" className="m-0 flex h-6 items-center gap-1" role="status">{[0, 1, 2].map((i) => <span key={i} className="size-1.5 animate-pulse rounded-full bg-fg-subtle" style={{ animationDelay: `${i * 160}ms` }} />)}</p>
+  const done = n >= words.length
+  return (
+    <>
+      <p>{words.slice(0, n).join(' ')}</p>
+      {done && actions && <div className="mt-2 flex flex-wrap gap-2">{actions.map((a, i) => <ChatActionButton key={i} a={a} />)}</div>}
+    </>
+  )
+}
+
 export function Chat() {
   const { state, d, dispatch } = useApp()
   const end = useRef<HTMLDivElement>(null)
   const count = state.chat?.length ?? 0
-  // After a message is sent or answered, bring the end of the chat into view by scrolling the chat's own scroller only.
-  // (scrollIntoView also scrolls the clipped frames around it, which shifted the whole screen under the message bar.)
+  // Follow the newest text, like a chat should: when you send a message, and as the reply is written, the end of the chat stays in view.
+  // The moment you scroll yourself, it stops following; scroll back to the bottom, or send again, and it follows once more.
+  // Only the chat's own scroller moves (scrollIntoView also shifted the clipped frames around it).
+  const stick = useRef(true)
+  const scroller = () => end.current?.closest<HTMLElement>('[role=region]') ?? null
+  const toEnd = (smooth: boolean) => { const sc = scroller(); sc?.scrollTo({ top: sc.scrollHeight, behavior: smooth ? 'smooth' : 'auto' }) }
+  const follow = () => { if (stick.current) toEnd(false) }
   useEffect(() => {
-    if (!count) return
-    const sc = end.current?.closest<HTMLElement>('[role=region]')
-    sc?.scrollTo({ top: sc.scrollHeight, behavior: 'smooth' })
-  }, [count])
+    const sc = scroller()
+    if (!sc) return
+    const away = () => { stick.current = false }
+    const onScroll = () => { if (sc.scrollHeight - sc.scrollTop - sc.clientHeight < 48) stick.current = true }
+    sc.addEventListener('wheel', away, { passive: true })
+    sc.addEventListener('touchmove', away, { passive: true })
+    sc.addEventListener('scroll', onScroll, { passive: true })
+    return () => { sc.removeEventListener('wheel', away); sc.removeEventListener('touchmove', away); sc.removeEventListener('scroll', onScroll) }
+  }, [])
+  const firstIds = useRef(new Set((state.chat ?? []).map((m) => m.id)))
+  useEffect(() => { if (count) { stick.current = true; toEnd(true) } }, [count])
   const done = d.evaluated || d.scenario.recovery != null
   const req = d.scenario.request
   const suggestions = useSuggestions()
@@ -390,8 +430,7 @@ export function Chat() {
           </Message>
           {(state.chat ?? []).map((m) => (
             <Message key={m.id} role={m.role === 'user' ? 'user' : 'assistant'}>
-              <p>{m.text}</p>
-              {m.actions && <div className="mt-2 flex flex-wrap gap-2">{m.actions.map((a, i) => <ChatActionButton key={i} a={a} />)}</div>}
+              {m.role === 'user' ? <p>{m.text}</p> : <Written text={m.text} animate={!firstIds.current.has(m.id)} onGrow={follow} actions={m.actions} />}
             </Message>
           ))}
         </MessageList>
