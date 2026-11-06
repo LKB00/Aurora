@@ -66,7 +66,8 @@ export const CARD_LABEL: Record<DisplayStatus, string> = {
 /** A tick = confirmed, cross = not available, "i" = partly known, empty ring = nothing known yet. */
 export function StatusGlyph({ status }: { status: DisplayStatus }) {
   const tone = STATUS_TONE[status]
-  if (tone === 'success' || tone === 'info') return <ApproveIcon width={16} height={16} className="shrink-0 self-center text-success" />
+  if (tone === 'info') return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden className="shrink-0 self-center text-fg-muted"><circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 8h.01" /></svg>
+  if (tone === 'success') return <ApproveIcon width={16} height={16} className="shrink-0 self-center text-success" />
   if (tone === 'danger') return <XIcon width={16} height={16} className="shrink-0 self-center text-danger" />
   if (tone === 'unsure') return <NeedsReviewIcon width={16} height={16} className="shrink-0 self-center text-unsure-fg" />
   return <span aria-hidden className="inline-block size-3.5 shrink-0 self-center rounded-full border-2 border-line-strong" />

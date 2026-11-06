@@ -2,6 +2,7 @@
 import { Badge, Button, Checkbox, ChevronIcon } from '@tattva/ui'
 import { LocationIcon } from './LocationIcon'
 import type { BusinessView } from '../logic/evaluate'
+import { inr } from '../logic/format'
 import { contactText } from '../logic/contact'
 import { nextAction } from '../logic/copy'
 import { useApp, useNav } from '../state/store'
@@ -38,6 +39,8 @@ export function BusinessCard({ b, evaluated = true, primary = false, select }: {
       </li>
     )
   })
+  const priceV = b.views.find((v) => v.requirement.id === 'price')?.primary
+  const quoted = priceV?.priceValue != null ? priceV.priceValue : null
   const open = () => nav.push({ name: 'business', id: b.business.id })
   const dist = b.business.distanceKm
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${b.business.name} ${(b.business.address ?? '').replace('…', '')} ${d.scenario.request.location}`.replace(/\s+/g, ' ').trim())}`
@@ -56,13 +59,14 @@ export function BusinessCard({ b, evaluated = true, primary = false, select }: {
             // The extra 8px around it is invisible tap area, so the 44pt target doesn't push the layout.
             <a
               href={mapsUrl}
+              onClick={(e) => e.stopPropagation()}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`${dist.toFixed(1)} kilometres away. Open ${b.business.name} in Google Maps`}
+              aria-label={`About ${dist.toFixed(1)} kilometres away, a straight-line estimate. Open ${b.business.name} in Google Maps`}
               className="relative mt-1 inline-flex items-center gap-1.5 text-body font-medium text-accent before:absolute before:-inset-2.5 before:content-['']"
             >
               <LocationIcon width={16} height={16} />
-              {dist.toFixed(1)} km
+              ≈{dist.toFixed(1)} km
             </a>
           )}
           </div>
@@ -72,6 +76,12 @@ export function BusinessCard({ b, evaluated = true, primary = false, select }: {
             </div>
           )}
         </div>
+        {quoted != null && (
+          <div>
+            <p className="m-0 text-subhead leading-6 font-semibold text-fg">{inr(quoted)}</p>
+            <p className="m-0 text-note text-fg-muted">Quoted on a call</p>
+          </div>
+        )}
         {evaluated && primary && <div><Badge tone={suit.tone}>{suit.label}</Badge></div>}
         {allUnknown ? (
           <div>

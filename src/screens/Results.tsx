@@ -25,7 +25,7 @@ export function Results() {
   const stopPicking = () => { dispatch({ type: 'SET_COMPARE', ids: [] }); setPicking(false) }
   const goCompare = () => { setPicking(false); nav.push({ name: 'compare' }) }
   const selectFor = (id: string) =>
-    picking ? { selected: chosen.includes(id), disabled: chosen.length >= MAX, onToggle: () => dispatch({ type: 'TOGGLE_COMPARE', id }) } : undefined
+    picking ? { selected: chosen.includes(id), disabled: chosen.length >= MAX && !chosen.includes(id), onToggle: () => dispatch({ type: 'TOGGLE_COMPARE', id }) } : undefined
   return (
     <Screen
       title={d.scenario.request.title}

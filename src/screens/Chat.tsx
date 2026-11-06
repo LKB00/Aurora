@@ -198,7 +198,7 @@ function Answer() {
   const ranked = [...matches].sort((x, y) => (priceOf(x) ?? Infinity) - (priceOf(y) ?? Infinity))
   const best = ranked[0]
   const rest = ranked.slice(1, 3)
-  const musts = d.scenario.requirements.filter((r) => r.kind === 'must_have').map((r) => lc(r.short))
+  const musts = d.requirements.filter((r) => r.kind === 'must_have').map((r) => lc(r.short))
   const open = (b: BusinessView) => nav.push({ name: 'business', id: b.business.id })
   const body = best ? `${matches.length === 1 ? 'It' : 'Each'} confirmed ${musts.slice(0, -1).join(', ')}${musts.length > 1 ? ' and ' : ''}${musts.at(-1)}.` : copy.body
   // One card: the conclusion, the one thing that needs a decision, and the action that opens what the conclusion is about.
@@ -364,7 +364,7 @@ export function Chat() {
       actions={<DemoButton />}
       footer={
         <div className="flex flex-col gap-2">
-          <ChatInput placeholder="Ask for anything" onSend={(t) => dispatch({ type: 'CHAT_SAY', text: t })} />
+          <ChatInput placeholder="Ask about this search" onSend={(t) => dispatch({ type: 'CHAT_SAY', text: t })} />
           <AIDisclosure />
         </div>
       }

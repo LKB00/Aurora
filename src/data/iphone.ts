@@ -27,7 +27,7 @@ export const iphoneRequest: SearchRequest = {
 }
 
 export const iphoneRequirements: Requirement[] = [
-  { id: 'variant', label: 'iPhone 17 Pro, 256GB in stock', short: '256GB in stock', kind: 'must_have', timeSensitive: true, question: 'Do you have the iPhone 17 Pro 256GB in stock today?' },
+  { id: 'variant', label: 'iPhone 17 Pro, 256GB model', short: '256GB in stock', kind: 'must_have', timeSensitive: true, question: 'Do you have the iPhone 17 Pro 256GB in stock today?' },
   { id: 'price', label: 'Final price within ₹1,20,000', short: 'Final price', kind: 'must_have', budget: 120000, timeSensitive: true, question: 'What is the final price, including any extra charges?' },
   { id: 'pickup', label: 'Pickup today', short: 'Pickup today', kind: 'must_have', timeSensitive: true, question: 'Can I pick it up from the store today?' },
   { id: 'colour', label: 'Available colours', short: 'Colours', kind: 'informational', timeSensitive: true, question: 'Which colours do you have in 256GB?' },

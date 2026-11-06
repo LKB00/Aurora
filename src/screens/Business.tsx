@@ -102,6 +102,7 @@ export function Business({ id }: { id: string }) {
   const { d } = useApp()
   const start = useStartFollowUp()
   const { sheet } = useLayer()
+  const [copied, setCopied] = useState(false)
   const b = d.businesses.find((x) => x.business.id === id)
   if (!b) return <Screen title="Business"><p className="p-4 text-body text-fg-muted">This business isn’t available.</p></Screen>
   const suggested = d.evaluated && suggestedBusiness(d.businesses)?.business.id === id
@@ -112,7 +113,6 @@ export function Business({ id }: { id: string }) {
   const conditions = keyConditions(b)
   const name = shortName(b.business.name)
   const calls = [...b.calls].sort((x, y) => (x.at ?? '').localeCompare(y.at ?? ''))
-  const [copied, setCopied] = useState(false)
   const where = `${b.business.name} ${(b.business.address ?? '').replace('…', '')} ${d.scenario.request.location}`.replace(/\s+/g, ' ').trim()
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(where)}`
   const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(where)}`
@@ -133,7 +133,7 @@ export function Business({ id }: { id: string }) {
       footer={
         act ? (
           <div className="flex flex-col gap-2">
-            <Button size="lg" className="w-full" onClick={() => (act.kind === 'followup' ? start(b.business.id, act.preselect) : undefined)} disabled={act.kind !== 'followup'}>{act.label}</Button>
+            {act.kind === 'followup' ? <Button size="lg" className="w-full" onClick={() => start(b.business.id, act.preselect)}>{act.label}</Button> : <p className="m-0 text-body font-medium text-fg">{act.label}</p>}
             {'detail' in act && act.detail && <p className="text-note text-fg-muted">{act.detail}</p>}
           </div>
         ) : undefined
@@ -146,10 +146,12 @@ export function Business({ id }: { id: string }) {
             {dist != null && (
               <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="relative inline-flex items-center gap-1.5 self-start text-body font-medium text-accent before:absolute before:-inset-2.5 before:content-['']">
                 <LocationIcon width={16} height={16} />
-                {dist.toFixed(1)} km away
+                ≈{dist.toFixed(1)} km away
               </a>
             )}
+            {dist != null && <p className="m-0 text-note text-fg-muted">Straight-line estimate, not a route.</p>}
             {b.business.address && <p className="m-0 text-body text-fg-muted">{b.business.address}</p>}
+            {b.business.addressNote && <p className="m-0 text-note text-fg-muted">{b.business.addressNote} Directions search by name and the part of the address shown.</p>}
             {b.business.rating && <p className="m-0 text-note text-fg-muted">★ {b.business.rating.value} · {b.business.rating.note}</p>}
           </div>
           {b.business.addressDiscrepancy && <Notice tone="warning" title="Location differs between sources">{b.business.addressDiscrepancy}</Notice>}

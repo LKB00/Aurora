@@ -66,3 +66,8 @@ Beyond the look, the app moves like an iOS app (`src/ui/StackNavigator.tsx`, `sr
 - **System details:** San Francisco system font, no tap flash, no double-tap zoom, no hover cursor, no page bounce.
 
 Not done: on-screen keyboard that pushes the composer up, tab bar, pull-to-refresh, haptics, swipe actions on rows, Dynamic Type. The San Francisco font only renders on Apple devices.
+
+## Scope notes
+
+- **Commitments are out of scope.** Aurora sometimes arranges things on a person's behalf (an appointment, a promised visit). This prototype does not model that or any cancellation; it is a future opportunity, not something the research here could support.
+- **Recorded scenarios.** The dates in the scenarios (3 November 2026) are a recording of an observed test, not current availability. Distances are straight-line estimates, business photos are unrelated stock images, and every call and answer is simulated.
