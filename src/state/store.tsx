@@ -102,7 +102,7 @@ export function initialState(scenarioId: string): AppState {
 
 export type Action =
   | { type: 'LOAD_SCENARIO'; id: string }
-  | { type: 'BEGIN' }
+  | { type: 'BEGIN'; id?: string }
   | { type: 'HOME' }
   | { type: 'RESET' }
   | { type: 'TICK' }
@@ -176,7 +176,7 @@ export function reducer(state: AppState, a: Action): AppState {
       return { ...initialState(a.id), session: (state.session ?? 0) + 1 }
     // From the start screen into the conversation: the request is sent and Aurora starts searching.
     case 'BEGIN':
-      return { ...initialState(state.scenarioId), stack: [{ name: 'chat' }], session: (state.session ?? 0) + 1 }
+      return { ...initialState(a.id ?? state.scenarioId), stack: [{ name: 'chat' }], session: (state.session ?? 0) + 1 }
     // Back to the entry screen: the prototype starts over from its first scenario.
     case 'HOME':
       return { ...initialState(DEFAULT_SCENARIO), session: (state.session ?? 0) + 1 }

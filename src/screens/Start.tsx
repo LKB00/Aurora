@@ -4,13 +4,14 @@ import { useState } from 'react'
 import { AISuggestIcon, SectionLabel } from '@tattva/ui'
 import worldDots from '../assets/world-dots.svg'
 import auroraMark from '../assets/aurora-mark.png'
+import { SCENARIOS } from '../data/scenarios'
 import { useApp } from '../state/store'
 import { ChatInput } from '../ui/ChatInput'
 import { DemoButton } from '../ui/Demo'
 import { LocationIcon } from '../ui/LocationIcon'
 
 const TRY = [
-  { id: 'draft', text: 'Find an iPhone 17 Pro in stock near me' },
+  { id: 'iphone-live', text: 'Find an iPhone 17 Pro in stock near me' },
   { id: 'dentist', text: 'Book a dental cleaning this week' },
   { id: 'plumbing', text: 'Find a plumber for a leak today' },
 ]
@@ -18,9 +19,10 @@ const TRY = [
 export function Start() {
   const { d, dispatch } = useApp()
   const req = d.scenario.request
-  const photo = req.attachments?.[0]
-  const [draft, setDraft] = useState('')
-  const pick = (id: string) => (id === 'draft' ? setDraft(req.text) : dispatch({ type: 'LOAD_SCENARIO', id }))
+  const [pickedId, setPickedId] = useState<string | null>(null)
+  const draft = pickedId ? (SCENARIOS.find((s) => s.id === pickedId)?.request.text ?? '') : ''
+  const draftPhoto = pickedId ? SCENARIOS.find((s) => s.id === pickedId)?.request.attachments?.[0] : undefined
+  const pick = (id: string) => setPickedId(id)
   return (
     <div className="relative flex h-full w-full flex-col overflow-hidden bg-bg text-fg" style={{ paddingTop: 'var(--safe-top, 0px)', paddingBottom: 'var(--safe-bottom, 0px)' }}>
       {/* The world, as dots, behind the question. Decoration only. */}
@@ -55,13 +57,13 @@ export function Start() {
           </ul>
         </section>
         <ChatInput
-          key={draft ? 'draft' : 'empty'}
+          key={pickedId ?? 'empty'}
           placeholder="Ask for anything"
           initialValue={draft}
-          onSend={() => dispatch({ type: 'BEGIN' })}
-          above={draft && photo ? <img src={photo.src} alt={photo.alt} className="h-16 w-24 rounded-xl object-cover" /> : undefined}
+          onSend={() => dispatch({ type: 'BEGIN', id: pickedId ?? undefined })}
+          above={draftPhoto ? <img src={draftPhoto.src} alt={draftPhoto.alt} className="h-16 w-24 rounded-xl object-cover" /> : undefined}
         />
-        <p className="m-0 px-2 text-center text-note leading-4 text-fg-muted">Prototype: nothing calls a real business. Tap the first suggestion, then send.</p>
+        <p className="m-0 px-2 text-center text-note leading-4 text-fg-muted">Prototype: nothing calls a real business. Tap a suggestion, then send.</p>
       </footer>
     </div>
   )
