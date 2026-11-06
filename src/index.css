@@ -41,26 +41,14 @@ html[data-ios] { --font-sans: -apple-system, 'SF Pro Text', BlinkMacSystemFont, 
 .glass-float svg { stroke-width: 2; }
 .glass-float:hover { background-color: color-mix(in srgb, var(--color-bg) 92%, transparent); }
 
-/* Scroll edge, as in the main prototype (after Tattva's ScrollEdge): where content scrolls under a bar, it softens gradually instead of meeting a
-   hard line. Five backdrop-blur layers, each masked to its own band, grow stronger towards the bar; a tint of the page colour sits on top.
-   Decoration only. With reduced transparency, or no backdrop-filter, a plain fade is drawn. */
-.se { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
-.se[data-edge='top'] { --se-dir: to top; overflow: hidden; transition: bottom 0.2s var(--ease-out); }
-.se[data-edge='bottom'] { --se-dir: to bottom; top: -8px; }
-.se > span { position: absolute; inset: 0; }
-.se-blur > span { position: absolute; inset: 0; }
-.se-b1 { backdrop-filter: blur(0.5px); -webkit-backdrop-filter: blur(0.5px); mask-image: linear-gradient(var(--se-dir), transparent 0%, #000 20%, #000 40%, transparent 60%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 0%, #000 20%, #000 40%, transparent 60%); }
-.se-b2 { backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); mask-image: linear-gradient(var(--se-dir), transparent 20%, #000 40%, #000 60%, transparent 80%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 20%, #000 40%, #000 60%, transparent 80%); }
-.se-b3 { backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); mask-image: linear-gradient(var(--se-dir), transparent 40%, #000 60%, #000 80%, transparent 100%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 40%, #000 60%, #000 80%, transparent 100%); }
-.se-b4 { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); mask-image: linear-gradient(var(--se-dir), transparent 60%, #000 80%, #000 100%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 60%, #000 80%, #000 100%); }
-.se-b5 { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); mask-image: linear-gradient(var(--se-dir), transparent 80%, #000 100%); -webkit-mask-image: linear-gradient(var(--se-dir), transparent 80%, #000 100%); }
-.se-tint { background-image: linear-gradient(var(--se-dir), transparent 0%, color-mix(in srgb, var(--bg) 55%, transparent) 100%); }
-.se[data-edge='bottom'] .se-tint { background-image: linear-gradient(var(--se-dir), transparent 0%, color-mix(in srgb, var(--bg) 88%, transparent) 55%, var(--bg) 100%); }
-/* Content under the bar: the bar's own height is nearly opaque, so nothing behind it competes with the title and buttons; it then fades out over 24px below. */
-.se[data-edge='top'][data-solid] .se-tint { background-image: linear-gradient(var(--se-dir), transparent 0px, color-mix(in srgb, var(--bg) 94%, transparent) 24px, color-mix(in srgb, var(--bg) 97%, transparent) 100%); }
-.se-fallback { display: none; background-image: linear-gradient(var(--se-dir), transparent 0%, var(--bg) 100%); }
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .se-blur { display: none; } .se-fallback { display: block; } }
-@media (prefers-reduced-transparency: reduce) { .se-blur { display: none; } .se-fallback { display: block; } }
+/* Scroll edge: where content scrolls under a bar, the bar turns into frosted glass with a hairline, instead of a gradient haze.
+   It fades in only once something is actually under it. With reduced transparency it is simply the page colour. */
+.se { position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0; transition: opacity 0.2s var(--ease-out);
+  background: color-mix(in srgb, var(--bg) 78%, transparent); backdrop-filter: blur(20px) saturate(1.5); -webkit-backdrop-filter: blur(20px) saturate(1.5); }
+.se[data-on] { opacity: 1; }
+.se[data-edge='top'] { box-shadow: 0 0.5px 0 0 var(--color-line); }
+.se[data-edge='bottom'] { box-shadow: 0 -0.5px 0 0 var(--color-line); }
+@media (prefers-reduced-transparency: reduce) { .se { background: var(--bg); backdrop-filter: none; -webkit-backdrop-filter: none; } }
 
 /* Touch targets: every tappable row is at least 44pt tall, as iOS asks. */
 button[aria-expanded]:not([data-slot="button"]) { min-height: 44px; align-items: center; }
