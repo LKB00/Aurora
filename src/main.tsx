@@ -4,6 +4,7 @@ import './index.css'
 import { App } from './App'
 import { EASE_SPRING, SPRING_MS } from './ui/motion'
 import { IPhoneFrame } from './device/IPhoneFrame'
+import { removeHoverStyles } from './ui/noHover'
 
 // Three ways to show the same app:
 //  • inside the mockup's iframe (?embed=ios): a phone viewport with the iPhone's status bar and home-indicator areas reserved
@@ -28,6 +29,8 @@ function Root() {
   return <IPhoneFrame />
 }
 
+removeHoverStyles()
+window.addEventListener('load', removeHoverStyles)
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Root />
