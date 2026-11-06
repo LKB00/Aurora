@@ -5,9 +5,17 @@ import { useNav } from '../state/store'
 import { FollowUpChip } from './FollowUpChip'
 import { useLayer } from './StackNavigator'
 
-/** Scroll edge: a calm frosted bar with a hairline, shown only once content has scrolled under it. No gradient haze. It belongs to the bar and ignores touch. */
-function Fade({ edge, on }: { edge: 'top' | 'bottom'; on: boolean }) {
-  return <span className="se" data-edge={edge} data-on={on ? '' : undefined} aria-hidden />
+/** Soft scroll edge, the same recipe as Tattva's ScrollEdge and the main prototype: five blur layers that grow stronger towards the bar, plus a tint of the
+ *  page colour. It belongs to the bar (sits behind its content) and ignores touch. */
+function Fade({ edge, style, solid }: { edge: 'top' | 'bottom'; style?: React.CSSProperties; solid?: boolean }) {
+  return (
+    <span className="se" data-edge={edge} data-solid={solid ? '' : undefined} style={style} aria-hidden>
+      <span className="se-fallback" />
+      <span className="se-blur">
+        <span className="se-b1" /><span className="se-b2" /><span className="se-b3" /><span className="se-b4" /><span className="se-b5" /><span className="se-tint" />
+      </span>
+    </span>
+  )
 }
 
 // iOS navigation bar + large title: the bar is 44pt with a "‹ Previous" back button; the large title lives at the top of the
@@ -74,7 +82,7 @@ export function Screen({ title, subtitle, back = true, onBack, backLabel: backLa
       </div>
       <header className={`isolate absolute inset-x-0 top-0 z-10 grid grid-cols-[auto_1fr_auto] gap-2 px-3 ${sheet ? 'items-start' : 'items-center'}`} style={{ height: `calc(${base}px + ${inset})`, paddingTop: sheet ? `calc(12px + ${inset})` : inset }}>
         {/* At rest nothing is under the bar, so nothing is softened (and over a photo there is no fade at all). Once content scrolls under it, the fade reaches 36px below the bar. */}
-        <Fade edge="top" on={scrolled} />
+        <Fade edge="top" solid={!hero || scrolled} style={{ bottom: hero && !scrolled ? `calc(${base}px - 20px * ${sheet ? 'var(--p, 0)' : '1'})` : scrolled ? -24 : 0, ['--se-solid' as string]: hero && !scrolled ? '100%' : '30%' }} />
         <div className="flex size-11 items-center justify-center">
           {back && !sheet && (
             <Button size="lg" variant="ghost" onClick={onBack ?? nav.back} aria-label={`Back to ${backLabelOverride ?? backLabel}`} className="glass glass-float size-11 rounded-full p-0 text-fg">
@@ -98,7 +106,7 @@ export function Screen({ title, subtitle, back = true, onBack, backLabel: backLa
         </div>
       )}
       {footer && (
-        <footer ref={footerRef} className="pointer-events-none isolate absolute inset-x-0 bottom-0 z-10 px-4 pt-3 pb-(--safe-bottom) [&>*]:pointer-events-auto"><Fade edge="bottom" on />{footer}</footer>
+        <footer ref={footerRef} className="pointer-events-none isolate absolute inset-x-0 bottom-0 z-10 px-4 pt-6 pb-(--safe-bottom) [&>*]:pointer-events-auto"><Fade edge="bottom" />{footer}</footer>
       )}
     </div>
   )
