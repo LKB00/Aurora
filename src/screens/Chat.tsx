@@ -294,8 +294,8 @@ function ProcessGroup({ showProcess }: { showProcess: boolean }) {
 }
 
 // The user's own message: attached images lead, and long wording folds to four lines with a way to read the rest.
-function UserRequest({ text, note, attachments }: { text: string; note?: string; attachments?: { src: string; alt: string }[] }) {
-  const [open, setOpen] = useState(false)
+export function UserRequest({ text, note, attachments, full }: { text: string; note?: string; attachments?: { src: string; alt: string }[]; full?: boolean }) {
+  const [open, setOpen] = useState(!!full)
   const [clamped, setClamped] = useState(false)
   const [viewing, setViewing] = useState<{ src: string; alt: string } | null>(null)
   const ref = useRef<HTMLParagraphElement>(null)
@@ -312,7 +312,7 @@ function UserRequest({ text, note, attachments }: { text: string; note?: string;
         </div>
       )}
       <p ref={ref} className={`m-0 ${open ? '' : 'line-clamp-4'}`}>{text}</p>
-      {(clamped || open) && (
+      {!full && (clamped || open) && (
         <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="relative h-auto! min-h-0! w-fit cursor-pointer before:absolute before:-inset-x-2 before:-inset-y-3.5 before:content-[''] cursor-pointer border-0 bg-transparent p-0 text-note leading-4 font-medium text-fg-muted underline underline-offset-2">{open ? 'Show less' : 'Show more'}</button>
       )}
       {note && <span className="block text-note text-fg-muted">{note}</span>}

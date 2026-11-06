@@ -13,6 +13,7 @@ import { chatReply, interpretChat, type ChatContext, type ChatMessage } from '..
 /* ---------- Routes ---------- */
 
 export type Route =
+  | { name: 'start' }
   | { name: 'chat' }
   | { name: 'progress' }
   | { name: 'results' }
@@ -84,7 +85,7 @@ const isRunning = (p: ProcessState) => p === 'discovering' || p === 'contacting'
 export function initialState(scenarioId: string): AppState {
   const s = getScenario(scenarioId)
   const startProcess = s.timeline[s.startStep].process
-  const root: Route[] = startProcess === 'completed' ? [{ name: 'chat' }, { name: 'results' }] : [{ name: 'chat' }]
+  const root: Route[] = s.intro ? [{ name: 'start' }] : startProcess === 'completed' ? [{ name: 'chat' }, { name: 'results' }] : [{ name: 'chat' }]
   return {
     scenarioId: s.id,
     step: s.startStep,
@@ -101,6 +102,7 @@ export function initialState(scenarioId: string): AppState {
 
 export type Action =
   | { type: 'LOAD_SCENARIO'; id: string }
+  | { type: 'BEGIN' }
   | { type: 'RESET' }
   | { type: 'TICK' }
   | { type: 'STOP_SEARCH' }
@@ -171,6 +173,9 @@ export function reducer(state: AppState, a: Action): AppState {
   switch (a.type) {
     case 'LOAD_SCENARIO':
       return { ...initialState(a.id), session: (state.session ?? 0) + 1 }
+    // From the start screen into the conversation: the request is sent and Aurora starts searching.
+    case 'BEGIN':
+      return { ...state, stack: [{ name: 'chat' }], future: [] }
     case 'RESET':
       return { ...initialState(state.scenarioId), session: (state.session ?? 0) + 1 }
     case 'GO': {
@@ -377,7 +382,7 @@ function applyFollowUp(state: AppState, s: Scenario, fu: FollowUpDraft): AppStat
 
 /* ---------- Persistence (per-browser convenience; reset restores the demo) ---------- */
 
-const KEY = 'aurora-decision-prototype-v4'
+const KEY = 'aurora-decision-prototype-v5'
 function load(): AppState {
   try {
     const raw = localStorage.getItem(KEY)
@@ -446,10 +451,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   // Live search: advance the deterministic timeline while it is running.
   useEffect(() => {
-    if (!d.running) return
+    if (!d.running || state.stack[0]?.name === 'start') return
     const t = window.setTimeout(() => dispatch({ type: 'TICK' }), 2800)
     return () => window.clearTimeout(t)
-  }, [d.running, state.step])
+  }, [d.running, state.step, state.stack[0]?.name])
 
   // Simulated follow-up call progression (never a real call).
   const phase = state.followUp?.phase

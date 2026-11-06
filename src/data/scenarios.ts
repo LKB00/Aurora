@@ -94,7 +94,7 @@ const notContactedTimeline: TimelineStep[] = [
 
 export const SCENARIOS: Scenario[] = [
   iphoneBase({
-    id: 'iphone-live', group: 'Observed journeys', name: 'iPhone 17 Pro · live search',
+    id: 'iphone-live', group: 'Observed journeys', name: 'iPhone 17 Pro · live search', intro: true,
     description: 'Watch the search run stage by stage, then land on 5 confirmed stores.',
     simulatedNote: 'This whole search, its calls and its answers are simulated, to show how a successful journey looks. Pacing is sped up.', isSimulatedSearch: true,
     businesses: [...allVisible.map((b, i) => ({ ...b, revealStep: [2, 2, 3][i] })), ...moreStores.map((b) => ({ ...b, revealStep: 3 }))],

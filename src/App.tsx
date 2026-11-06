@@ -7,11 +7,13 @@ import { Business } from './screens/Business'
 import { Compare } from './screens/Compare'
 import { FollowUp } from './screens/FollowUp'
 import { Controls } from './ui/Demo'
+import { Start } from './screens/Start'
 
-const LABEL: Record<string, string> = { chat: 'Search', progress: 'Progress', results: 'Results', business: 'Business', compare: 'Compare', followup: 'Follow-up', controls: 'Controls' }
+const LABEL: Record<string, string> = { start: 'Aurora', chat: 'Search', progress: 'Progress', results: 'Results', business: 'Business', compare: 'Compare', followup: 'Follow-up', controls: 'Controls' }
 
 function renderRoute(r: Route) {
   switch (r.name) {
+    case 'start': return <Start />
     case 'chat': return <Chat />
     case 'progress': return <Progress />
     case 'results': return <Results />
