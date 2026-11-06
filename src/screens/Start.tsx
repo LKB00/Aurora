@@ -1,6 +1,7 @@
 // Where the prototype begins: Aurora's landing. "Find anything." over a quiet map of dots, a row of things to try, and the message bar.
 // Tapping the first one writes the request (with its photo) into the bar; sending it starts the story: ask, watch Aurora work, get the answer.
 import { useState } from 'react'
+import { AISuggestIcon, SectionLabel } from '@tattva/ui'
 import worldDots from '../assets/world-dots.svg'
 import auroraMark from '../assets/aurora-mark.png'
 import { useApp } from '../state/store'
@@ -9,9 +10,9 @@ import { DemoButton } from '../ui/Demo'
 import { LocationIcon } from '../ui/LocationIcon'
 
 const TRY = [
-  { id: 'draft', label: 'iPhone 17 Pro', place: 'Sector 3' },
-  { id: 'dentist', label: 'Dentist appointment', place: 'Kanakapura Road' },
-  { id: 'plumbing', label: 'Plumber today', place: 'Sector 3' },
+  { id: 'draft', text: 'Find an iPhone 17 Pro in stock near me' },
+  { id: 'dentist', text: 'Book a dental cleaning this week' },
+  { id: 'plumbing', text: 'Find a plumber for a leak today' },
 ]
 
 export function Start() {
@@ -23,7 +24,7 @@ export function Start() {
   return (
     <div className="relative flex h-full w-full flex-col overflow-hidden bg-bg text-fg" style={{ paddingTop: 'var(--safe-top, 0px)', paddingBottom: 'var(--safe-bottom, 0px)' }}>
       {/* The world, as dots, behind the question. Decoration only. */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-[12%] bottom-[24%] bg-fg-subtle opacity-35 [mask-image:var(--map)] [mask-position:48%_center] [mask-repeat:no-repeat] [mask-size:150%_auto] [-webkit-mask-image:var(--map)] [-webkit-mask-position:48%_center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:150%_auto]" style={{ ['--map' as string]: `url(${worldDots})` }} />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-[14%] bottom-[30%] bg-fg-subtle opacity-20 [mask-image:var(--map)] [mask-position:48%_center] [mask-repeat:no-repeat] [mask-size:135%_auto] [-webkit-mask-image:var(--map)] [-webkit-mask-position:48%_center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:135%_auto]" style={{ ['--map' as string]: `url(${worldDots})` }} />
 
       <header className="relative z-10 grid grid-cols-[44px_1fr_44px] items-start px-3 pt-3">
         <div className="glass glass-float flex size-11 items-center justify-center rounded-full"><DemoButton /></div>
@@ -40,23 +41,19 @@ export function Start() {
       </main>
 
       <footer className="relative z-10 flex flex-col gap-3 px-4 pb-3">
-        <div>
-          <p className="m-0 mb-2 px-1 text-note leading-4 text-fg-muted">Try one of these</p>
-          <ul className="m-0 -mx-4 flex list-none gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Things to try">
-            {TRY.map((t, i) => (
-              <li key={t.id} className="shrink-0">
-                <button
-                  type="button"
-                  onClick={() => pick(t.id)}
-                  className={`flex min-h-11 cursor-pointer items-center gap-2 rounded-full border px-4 text-body leading-5 whitespace-nowrap active:opacity-80 ${i === 0 ? 'border-transparent bg-lime-soft text-fg' : 'border-line bg-surface text-fg'}`}
-                >
-                  <span className="font-medium">{t.label}</span>
-                  <span className="text-fg-muted">{t.place}</span>
+        <section aria-label="Suggested prompts" className="flex flex-col gap-1">
+          <SectionLabel>Suggested</SectionLabel>
+          <ul className="m-0 flex list-none flex-col p-0">
+            {TRY.map((t) => (
+              <li key={t.id}>
+                <button type="button" onClick={() => pick(t.id)} className="flex min-h-11 w-full cursor-pointer items-start gap-3 rounded-control px-1 py-2.5 text-left text-body leading-6 text-fg active:bg-pressed">
+                  <span className="flex h-6 shrink-0 items-center text-fg-muted"><AISuggestIcon width={16} height={16} /></span>
+                  <span className="min-w-0">{t.text}</span>
                 </button>
               </li>
             ))}
           </ul>
-        </div>
+        </section>
         <ChatInput
           key={draft ? 'draft' : 'empty'}
           placeholder="Ask for anything"
@@ -64,7 +61,7 @@ export function Start() {
           onSend={() => dispatch({ type: 'BEGIN' })}
           above={draft && photo ? <img src={photo.src} alt={photo.alt} className="h-16 w-24 rounded-xl object-cover" /> : undefined}
         />
-        <p className="m-0 px-2 text-center text-note leading-4 text-fg-muted">Prototype: nothing calls a real business. Tap “iPhone 17 Pro”, then send.</p>
+        <p className="m-0 px-2 text-center text-note leading-4 text-fg-muted">Prototype: nothing calls a real business. Tap the first suggestion, then send.</p>
       </footer>
     </div>
   )
