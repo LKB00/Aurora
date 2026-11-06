@@ -51,7 +51,8 @@ export function ChatInput({ placeholder = 'Ask for anything', onSend, initialVal
           <span className="grid size-10 shrink-0 place-items-center text-fg" aria-hidden><MicIcon width={23} height={23} /></span>
         )}
       </label>
-      <span className="grid size-14 shrink-0 place-items-center rounded-full border border-line bg-surface shadow-sm" aria-hidden><Orb /></span>
+      {/* Once there is a message the voice orb steps aside, so the text gets the full width. */}
+      {!value.trim() && <span className="grid size-14 shrink-0 place-items-center rounded-full border border-line bg-surface shadow-sm" aria-hidden><Orb /></span>}
     </div>
   )
 }
