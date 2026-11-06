@@ -231,7 +231,7 @@ export interface Scenario {
   id: string
   /** Opens on the start screen (the request is drafted, not yet sent) instead of in the middle of the search. */
   intro?: boolean
-  group: 'Observed journeys' | 'Follow-up outcomes' | 'Recovery & edge states'
+  group: 'Main journeys' | 'After a follow-up call' | 'When things go wrong'
   name: string
   description: string
   /** What in this scenario is simulated – shown in the demo menu and the banner. */

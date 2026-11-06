@@ -29,7 +29,7 @@ export function Start() {
       {/* The world, as dots, behind the question. Decoration only. */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-[14%] bottom-[30%] bg-fg-subtle opacity-20 [mask-image:var(--map)] [mask-position:48%_center] [mask-repeat:no-repeat] [mask-size:135%_auto] [-webkit-mask-image:var(--map)] [-webkit-mask-position:48%_center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:135%_auto]" style={{ ['--map' as string]: `url(${worldDots})` }} />
 
-      <header className="relative z-10 grid grid-cols-[44px_1fr_44px] items-start px-3 pt-3">
+      <header className="relative z-10 grid grid-cols-[1fr_auto_1fr] items-start px-3 pt-3">
         <span />
         <div className="flex flex-col items-center gap-1">
           <img src={auroraMark} alt="Aurora" className="h-9 w-auto" />
@@ -74,7 +74,7 @@ export function Start() {
             ) : undefined}
           />
         </div>
-        <p className="m-0 px-2 text-center text-note leading-4 text-fg-muted">Prototype: nothing calls a real business. Tap a suggestion, then send.</p>
+        <p className="m-0 px-2 text-center text-note leading-4 text-fg-muted">Simulated: nothing here calls a real business. Tap a suggestion, then send.</p>
       </footer>
     </div>
   )

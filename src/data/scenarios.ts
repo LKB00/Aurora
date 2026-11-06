@@ -96,7 +96,7 @@ const notContactedTimeline: TimelineStep[] = [
 function liveFrom(base: Scenario, id: string, where: string): Scenario {
   const last = base.timeline[base.timeline.length - 1]
   return {
-    ...base, id, name: base.name.replace(' · ', ' · live search · '), intro: true, isSimulatedSearch: true,
+    ...base, id, name: base.name.split(' · ')[0] + ' · live search', intro: true, isSimulatedSearch: true,
     description: 'Watch the search run stage by stage, then land on the observed result.',
     simulatedNote: 'The pacing of this search is simulated. The businesses and answers are the ones Aurora returned. Follow-up calls return scripted, simulated answers.',
     businesses: base.businesses.map((b, i) => ({ ...b, revealStep: [2, 2, 3][i % 3] })),
@@ -112,8 +112,8 @@ function liveFrom(base: Scenario, id: string, where: string): Scenario {
 
 export const SCENARIOS: Scenario[] = [
   iphoneBase({
-    id: 'iphone-live', group: 'Observed journeys', name: 'iPhone 17 Pro · live search', intro: true,
-    description: 'Watch the search run stage by stage, then land on 5 confirmed stores.',
+    id: 'iphone-live', group: 'Main journeys', name: 'iPhone 17 Pro · live search', intro: true,
+    description: 'Watch the search run stage by stage, then land on 5 confirmed businesses.',
     simulatedNote: 'This whole search, its calls and its answers are simulated, to show how a successful journey looks. Pacing is sped up.', isSimulatedSearch: true,
     businesses: [...allVisible.map((b, i) => ({ ...b, revealStep: [2, 2, 3][i] })), ...moreStores.map((b) => ({ ...b, revealStep: 3 }))],
     calls: [simCall('ven', 'completed_with_information', nov3('18:38')), simCall('pai', 'completed_with_information', nov3('18:40')), simCall('srisai', 'completed_with_information', nov3('18:42')), simCall('bal', 'completed_with_information', nov3('18:44')), simCall('san', 'completed_with_information', nov3('18:46'))],
@@ -129,18 +129,18 @@ export const SCENARIOS: Scenario[] = [
     startStep: 0,
   }),
   iphoneBase({
-    id: 'iphone-live-observed', group: 'Observed journeys', name: 'iPhone 17 Pro · live search (observed result)',
+    id: 'iphone-live-observed', group: 'Main journeys', name: 'iPhone 17 Pro · live search (observed result)',
     description: 'The search as Aurora actually returned it: no exact match yet.',
     simulatedNote: 'The pacing of the live search is simulated. ' + followUpNote('answered'),
     startStep: 0,
   }),
   iphoneBase({
-    id: 'iphone-results', group: 'Observed journeys', name: 'iPhone 17 Pro · results',
+    id: 'iphone-results', group: 'Main journeys', name: 'iPhone 17 Pro · results',
     description: 'Start at the finished search with the observed top three results.',
     simulatedNote: followUpNote('answered'),
   }),
   {
-    id: 'dentist', group: 'Observed journeys', name: 'Dentist · qualified & conflicting evidence',
+    id: 'dentist', group: 'Main journeys', name: 'Dentist · qualified & conflicting evidence',
     description: 'Conditional price, conflicting appointment evidence, and 100% matches whose claims aren’t attributed.',
     simulatedNote: 'Follow-up calls return scripted, simulated answers.',
     isSimulatedSearch: false, request: D.dentistRequest, requirements: D.dentistRequirements, businesses: D.dentistBusinesses,
@@ -148,7 +148,7 @@ export const SCENARIOS: Scenario[] = [
     timeline: D.dentistTimeline, startStep: 0, now: nov3('15:00'), followUpMode: 'answered', scripts: D.dentistScripts,
   },
   {
-    id: 'plumbing', group: 'Observed journeys', name: 'Plumbing · conditional service',
+    id: 'plumbing', group: 'Main journeys', name: 'Plumbing · conditional service',
     description: 'A drop-off repair with inspection pending, and a location that differs between sources.',
     simulatedNote: 'Follow-up calls return scripted, simulated answers.',
     isSimulatedSearch: false, request: P.plumbingRequest, requirements: P.plumbingRequirements, businesses: P.plumbingBusinesses,
@@ -157,28 +157,28 @@ export const SCENARIOS: Scenario[] = [
   },
 
   iphoneBase({
-    id: 'iphone-noanswer', group: 'Follow-up outcomes', name: 'iPhone · follow-up not answered',
+    id: 'iphone-noanswer', group: 'After a follow-up call', name: 'iPhone · follow-up not answered',
     description: 'Ask Venkateshwara again — nobody picks up. Nothing about the business changes.',
     simulatedNote: followUpNote('no_answer'), followUpMode: 'no_answer',
   }),
   iphoneBase({
-    id: 'iphone-partial', group: 'Follow-up outcomes', name: 'iPhone · follow-up partly answered',
+    id: 'iphone-partial', group: 'After a follow-up call', name: 'iPhone · follow-up partly answered',
     description: 'The follow-up confirms 256GB, but the price is still pending.',
     simulatedNote: followUpNote('partial'), followUpMode: 'partial',
   }),
   iphoneBase({
-    id: 'iphone-conflict', group: 'Follow-up outcomes', name: 'iPhone · follow-up contradicts itself',
+    id: 'iphone-conflict', group: 'After a follow-up call', name: 'iPhone · follow-up contradicts itself',
     description: 'Two staff members give different answers about 256GB stock.',
     simulatedNote: followUpNote('conflicting'), followUpMode: 'conflicting',
   }),
   iphoneBase({
-    id: 'iphone-failed', group: 'Follow-up outcomes', name: 'iPhone · follow-up call fails',
+    id: 'iphone-failed', group: 'After a follow-up call', name: 'iPhone · follow-up call fails',
     description: 'The follow-up call fails before it connects.',
     simulatedNote: followUpNote('failed'), followUpMode: 'failed',
   }),
 
   iphoneBase({
-    id: 'edge-none-found', group: 'Recovery & edge states', name: 'No businesses found',
+    id: 'edge-none-found', group: 'When things go wrong', name: 'No businesses found',
     description: 'Discovery finds nothing in the search area.',
     simulatedNote: 'This whole search result is simulated.', isSimulatedSearch: true,
     businesses: [], calls: [], activity: [], evidence: [], listed: [], countsNote: undefined,
@@ -188,18 +188,18 @@ export const SCENARIOS: Scenario[] = [
       title: 'No businesses found near Sector 3',
       body: 'Aurora didn’t find any business likely to sell the iPhone 17 Pro in this area.',
       preserved: 'Your request is saved, so you won’t need to type it again.',
-      actions: [{ kind: 'load_scenario', scenarioId: 'iphone-live', label: 'Try a wider search (demo)' }],
+      actions: [{ kind: 'load_scenario', scenarioId: 'iphone-live', label: 'Try a wider search' }],
     },
   }),
   iphoneBase({
-    id: 'edge-not-contacted', group: 'Recovery & edge states', name: 'Found, but none contacted',
+    id: 'edge-not-contacted', group: 'When things go wrong', name: 'Found, but none contacted',
     description: 'Businesses were found but no calls could be placed.',
     simulatedNote: 'This search state is simulated. Once you resume, the observed results appear.', isSimulatedSearch: true,
     businesses: I.iphoneBusinesses.map((b) => ({ ...b, revealStep: b.id === 'ven' ? 1 : 2 })),
     timeline: notContactedTimeline, startStep: 0,
   }),
   iphoneBase({
-    id: 'edge-all-unanswered', group: 'Recovery & edge states', name: 'All calls unanswered',
+    id: 'edge-all-unanswered', group: 'When things go wrong', name: 'All calls unanswered',
     description: 'Every business Aurora called didn’t pick up.',
     simulatedNote: 'These call outcomes are simulated.', isSimulatedSearch: true,
     businesses: allVisible,
@@ -209,7 +209,7 @@ export const SCENARIOS: Scenario[] = [
     startStep: 0,
   }),
   iphoneBase({
-    id: 'edge-no-info', group: 'Recovery & edge states', name: 'Calls answered, nothing useful',
+    id: 'edge-no-info', group: 'When things go wrong', name: 'Calls answered, nothing useful',
     description: 'Calls connected, but none of your questions got an answer.',
     simulatedNote: 'These call outcomes are simulated.', isSimulatedSearch: true,
     businesses: allVisible,
@@ -219,7 +219,7 @@ export const SCENARIOS: Scenario[] = [
     startStep: 0,
   }),
   iphoneBase({
-    id: 'edge-no-suitable', group: 'Recovery & edge states', name: 'No suitable option',
+    id: 'edge-no-suitable', group: 'When things go wrong', name: 'No suitable option',
     description: 'Every business fails a must-have. Try raising the budget to ₹1,26,000.',
     simulatedNote: 'These answers are simulated.', isSimulatedSearch: true,
     businesses: allVisible,
@@ -235,14 +235,14 @@ export const SCENARIOS: Scenario[] = [
     },
   }),
   iphoneBase({
-    id: 'edge-interrupted', group: 'Recovery & edge states', name: 'Search interrupted',
+    id: 'edge-interrupted', group: 'When things go wrong', name: 'Search interrupted',
     description: 'The connection drops mid-way through calling. Resume to finish.',
     simulatedNote: 'The interruption is simulated. Once you resume, the observed results appear.', isSimulatedSearch: true,
     businesses: I.iphoneBusinesses.map((b) => ({ ...b, revealStep: b.id === 'ven' ? 2 : 4 })),
     timeline: interruptedTimeline, startStep: 3,
   }),
   iphoneBase({
-    id: 'edge-failed', group: 'Recovery & edge states', name: 'Search failed to start',
+    id: 'edge-failed', group: 'When things go wrong', name: 'Search failed to start',
     description: 'The search can’t start at all.',
     simulatedNote: 'This failure is simulated.', isSimulatedSearch: true,
     businesses: [], calls: [], activity: [], evidence: [], listed: [], countsNote: undefined,
@@ -262,6 +262,10 @@ SCENARIOS.push(
   liveFrom(SCENARIOS.find((x) => x.id === 'dentist')!, 'dentist-live', 'Kanakapura Road'),
   liveFrom(SCENARIOS.find((x) => x.id === 'plumbing')!, 'plumbing-live', 'Sector 3'),
 )
+
+// Keep each live search next to its finished version.
+const ORDER = ['iphone-live', 'iphone-live-observed', 'iphone-results', 'dentist-live', 'dentist', 'plumbing-live', 'plumbing']
+SCENARIOS.sort((a, b) => { const x = ORDER.indexOf(a.id), y = ORDER.indexOf(b.id); return (x < 0 ? 99 : x) - (y < 0 ? 99 : y) })
 
 export const DEFAULT_SCENARIO = 'iphone-live'
 export const getScenario = (id: string) => SCENARIOS.find((s) => s.id === id) ?? SCENARIOS[0]
