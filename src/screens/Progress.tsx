@@ -214,14 +214,11 @@ export function Progress() {
               ))}
             </dl>
           )}
-          {(found != null || reached != null) && <p className="m-0 -mt-1 text-small text-fg-muted">Found and reached are Aurora’s own counts. Reviewed is how many were checked against your must-haves.</p>}
           <ActivityTrace steps={trace} summary={`${trace.length} steps${d.running ? ' so far' : ''}`} streaming={d.running} defaultOpen={!d.evaluated} actorLabels={{ ai: 'Aurora', rule: 'Rule' }} />
         </Section>
 
-        {d.scenario.countsNote && <Notice tone="info" title="About these counts">{d.scenario.countsNote}</Notice>}
         {d.scenario.listedNote && d.scenario.listed.length > 0 && (
           <Section label="Also in Aurora’s list">
-            <p className="m-0 text-note text-fg-muted">{d.scenario.listedNote}</p>
             <ul className={`${card} m-0 flex list-none flex-col p-0`}>
               {listed.shown.map((l) => (
                 <li key={l.name} className="flex items-center justify-between gap-3 border-b border-line p-3 text-body last:border-b-0"><span className="min-w-0 truncate">{l.name}</span><Badge className="shrink-0 whitespace-nowrap">{l.shownStatus}</Badge></li>

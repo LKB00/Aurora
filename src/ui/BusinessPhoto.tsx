@@ -35,7 +35,6 @@ export function BusinessPhoto({ name, index, tall = false }: { name: string; ind
           <img key={src + i} src={src} alt={`Photo ${i + 1} of ${photos.length} for ${name}`} loading="lazy" draggable={false} className="w-full shrink-0 snap-center object-cover" style={{ height: sheet ? 'calc(160px + 128px * var(--p, 0))' : tall ? 288 : 160 }} />
         ))}
       </div>
-      <span className="pointer-events-none absolute top-2 left-2 rounded-full bg-fg/55 px-2 py-0.5 text-[11px] leading-4 text-bg backdrop-blur-sm">Illustrative photo</span>
       {photos.length > 1 && (
         <div className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center gap-1.5" aria-hidden>
           {photos.map((_, i) => (

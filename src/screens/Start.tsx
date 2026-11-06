@@ -74,7 +74,6 @@ export function Start() {
             ) : undefined}
           />
         </div>
-        <p className="m-0 px-2 text-center text-note leading-4 text-fg-muted">Simulated: nothing here calls a real business. Tap a suggestion, then send.</p>
       </footer>
     </div>
   )

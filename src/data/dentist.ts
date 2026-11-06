@@ -113,7 +113,7 @@ export const dentistCountsNote =
   'Aurora showed 50 businesses, 11 websites and 45 calls in one summary, and 61 businesses across 7 sites, 27 called and 61 ranked in another. The research doesn’t explain the difference, so the totals aren’t reconciled here.'
 
 export const dentistTimeline: TimelineStep[] = [
-  step('completed', ['done', 'Businesses found (totals differ across screens)'], ['done', 'Calls completed'], ['done', 'Results ranked']),
+  step('completed', ['done', 'Businesses found'], ['done', 'Calls completed'], ['done', 'Results ranked']),
 ]
 
 export const dentistScripts: Record<string, Partial<Record<'answered', FollowUpScript>>> = {

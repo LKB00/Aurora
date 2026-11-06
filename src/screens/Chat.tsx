@@ -372,7 +372,7 @@ export function Chat() {
       <div className="px-4 pb-6">
         <MessageList>
           <Message role="user">
-            <UserRequest text={req.text} note={req.note} attachments={req.attachments} />
+            <UserRequest text={req.text} attachments={req.attachments} />
           </Message>
           <Message role="assistant">
             <div className="flex flex-col gap-4">

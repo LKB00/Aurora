@@ -74,7 +74,7 @@ export function FollowUp({ id }: { id: string }) {
   /* 2 — review and approve */
   if (fu.phase === 'review') {
     return (
-      <Screen title={`Call ${name}`} subtitle="Review before Aurora calls · simulated" back={false}>
+      <Screen title={`Call ${name}`} subtitle="Review before Aurora calls" back={false}>
         <div className="flex flex-col gap-4 px-4 py-4">
           <ApprovalPrompt
             risk="medium"
@@ -104,7 +104,7 @@ export function FollowUp({ id }: { id: string }) {
       : fu.phase === 'calling' ? `I’m on the line with ${name}, asking ${n === 1 ? 'your question' : `your ${n} questions`}.`
       : `I have their answer. I’m checking it against your request.`
     return (
-      <Screen title={`Calling ${name}`} subtitle="Follow-up call · simulated" back={false}>
+      <Screen title={`Calling ${name}`} subtitle="Follow-up call" back={false}>
         <div className="flex flex-col gap-4 px-4 py-4">
           <WorkingEdge active label="Aurora is calling">
             <div className="flex flex-col gap-4 rounded-card border border-line bg-surface p-4">
@@ -146,7 +146,7 @@ export function FollowUp({ id }: { id: string }) {
   const done = () => { dispatch({ type: 'FU_CLOSE' }); nav.popTo({ name: 'business', id }) }
   const noInfo = !r || r.cancelled || r.changes.every((c) => c.statements.length === 0)
   return (
-    <Screen title={`Result · ${name}`} subtitle="Follow-up call · simulated" back={false} footer={<div className="flex flex-col gap-2"><Button size="lg" className="w-full" onClick={done}>See {name}</Button>{r && !r.cancelled && <Button size="lg" variant="secondary" className="w-full" onClick={() => dispatch({ type: 'FU_RETRY' })}>Ask again</Button>}</div>}>
+    <Screen title={`Result · ${name}`} subtitle="Follow-up call" back={false} footer={<div className="flex flex-col gap-2"><Button size="lg" className="w-full" onClick={done}>See {name}</Button>{r && !r.cancelled && <Button size="lg" variant="secondary" className="w-full" onClick={() => dispatch({ type: 'FU_RETRY' })}>Ask again</Button>}</div>}>
       <div className="flex flex-col gap-8 px-4 py-4">
         {r?.cancelled && <Notice tone="info" title="You cancelled the call">Nothing changed. Everything Aurora knew before is still here.</Notice>}
         {r && !r.cancelled && noInfo && (

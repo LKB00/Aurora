@@ -1,5 +1,5 @@
 // Prototype-only controls: switch scenario, move the clock forward, start over. Kept behind one button so the product screens stay product screens.
-import { Badge, SectionLabel, SegmentedControl, TrayRow } from '@tattva/ui'
+import { Badge, SectionLabel, TrayRow } from '@tattva/ui'
 import { SCENARIOS } from '../data/scenarios'
 import { useApp, useNav } from '../state/store'
 import { Screen } from './Screen'
@@ -24,7 +24,7 @@ export function Controls() {
   return (
     <Screen title="Scenarios">
       <div className="flex flex-col gap-8 px-4 py-4">
-        <p className="m-0 text-body leading-6 text-fg-muted">Jump to any moment in Aurora, from a successful search to the ways it can go wrong. Every call and answer is simulated; business photos are stand-ins.</p>
+        <p className="m-0 text-body leading-6 text-fg-muted">Jump to any moment in Aurora, from a successful search to the ways it can go wrong.</p>
         {groups.map((g) => (
           <section key={g} aria-label={g} className="flex flex-col gap-2">
             <SectionLabel className="px-0!">{g}</SectionLabel>
@@ -41,16 +41,6 @@ export function Controls() {
             </ul>
           </section>
         ))}
-        <section aria-label="Time passing" className="flex flex-col gap-2">
-          <SectionLabel className="px-0!">Time passing</SectionLabel>
-          <p className="m-0 text-note text-fg-muted">Answers about stock, slots and prices go out of date. See how Aurora shows it.</p>
-          <SegmentedControl
-            label="Time ahead"
-            value={String(state.hoursAhead)}
-            onChange={(v) => dispatch({ type: 'SET_HOURS_AHEAD', value: Number(v) })}
-            options={[{ value: '0', label: 'Now' }, { value: '6', label: '+6 h' }, { value: '14', label: '+14 h' }, { value: '24', label: '+1 day' }]}
-          />
-        </section>
       </div>
     </Screen>
   )

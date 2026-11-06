@@ -54,7 +54,7 @@ export const BASIS_LABEL: Record<Basis, string> = {
   calculated: 'Calculated from figures the business gave',
   displayed: 'Shown in Aurora’s result – no visible source',
   listing: 'From a map / directory listing',
-  simulated: 'Scripted answer to a follow-up you approved — not a real call',
+  simulated: 'Answer to a follow-up call you approved',
 }
 
 /* ---------- Research activity feed ---------- */
@@ -108,7 +108,7 @@ export function buildActivity(s: Scenario, timeline: TimelineStep, bvs: Business
 
   const disc = timeline.stages.discover
   if (disc.status === 'active') out.push({ id: 'disc', kind: 'discovery', at: null, live: true, text: `Searching maps and websites near ${s.request.location}` })
-  if (disc.status === 'done') out.push({ id: 'disc', kind: 'discovery', at: null, text: `Discovery finished: ${disc.detail.replace(' (as shown by Aurora)', '')}`, detail: 'Count as displayed by Aurora' })
+  if (disc.status === 'done') out.push({ id: 'disc', kind: 'discovery', at: null, text: `Discovery finished: ${disc.detail.replace(' (as shown by Aurora)', '')}` })
   if (disc.status === 'failed') out.push({ id: 'disc', kind: 'discovery', at: null, text: 'Discovery couldn’t start', tone: 'neutral' })
   if (disc.status === 'done' && s.sources?.length)
     out.push({ id: 'web', kind: 'website', at: null, text: `Found ${s.sources.length} websites with product information`, detail: s.sources.map((w) => w.label).join(' · ') })
@@ -209,14 +209,14 @@ export function buildMilestones(s: Scenario, timeline: TimelineStep, bvs: Busine
     {
       id: 'discover', state: STATE_OF(discover.status),
       title: discover.status === 'done' ? 'Found businesses' : discover.status === 'failed' ? 'Couldn’t start looking' : discover.status === 'active' ? 'Looking for businesses' : 'Look for businesses',
-      detail: discover.status === 'done' ? [discover.detail.replace(' (as shown by Aurora)', '') + ' — as shown by Aurora', sites ? `${sites} websites checked` : ''].filter(Boolean).join(' · ') : discover.status === 'active' ? `Searching maps and websites near ${s.request.location}` : undefined,
+      detail: discover.status === 'done' ? [discover.detail.replace(' (as shown by Aurora)', '') , sites ? `${sites} websites checked` : ''].filter(Boolean).join(' · ') : discover.status === 'active' ? `Searching maps and websites near ${s.request.location}` : undefined,
     },
     {
       id: 'contact', state: STATE_OF(contact.status),
       title: contact.status === 'done' ? 'Contacted businesses' : contact.status === 'active' ? 'Calling businesses' : 'Call businesses',
       // Aurora's own count (as displayed) and the three businesses reviewed here are different scopes – both are shown, labelled, never merged.
       detail: contact.status === 'pending' ? undefined : [
-        contact.status === 'done' ? `${contact.detail.replace(' (as shown by Aurora)', '')} — as shown by Aurora` : contact.detail,
+        contact.status === 'done' ? contact.detail.replace(' (as shown by Aurora)', '') : contact.detail,
         bvs.length ? `Of the ${bvs.length} reviewed here: ${callParts.join(' · ')}` : '',
       ].filter(Boolean).join('. '),
     },

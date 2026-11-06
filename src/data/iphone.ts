@@ -155,8 +155,8 @@ export const iphoneTimeline: TimelineStep[] = [
   step('discovering', ['active', 'Searching maps and websites near Sector 3'], ['pending', 'Starts when businesses are found'], ['pending', 'Waiting for answers']),
   step('contacting', ['done', '52 businesses found'], ['active', 'Calls under way'], ['pending', 'Waiting for answers']),
   step('contacting', ['done', '52 businesses found'], ['active', 'First answers are in'], ['pending', 'Waiting for calls to finish']),
-  step('evaluating', ['done', '52 businesses found'], ['done', '17 businesses reached (as shown by Aurora)'], ['active', 'Checking answers against your request']),
-  step('completed', ['done', '52 businesses found'], ['done', '17 businesses reached (as shown by Aurora)'], ['done', '52 businesses ranked']),
+  step('evaluating', ['done', '52 businesses found'], ['done', '17 businesses reached'], ['active', 'Checking answers against your request']),
+  step('completed', ['done', '52 businesses found'], ['done', '17 businesses reached'], ['done', '52 businesses ranked']),
 ]
 
 /* ---------- Simulated follow-up answers (never real) ---------- */

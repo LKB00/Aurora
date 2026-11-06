@@ -39,14 +39,14 @@ describe('progress milestones', () => {
     const d = derive(initialState('iphone-results'))
     const m = buildMilestones(d.scenario, d.timeline, d.businesses)
     expect(m.every((x) => x.state === 'done')).toBe(true)
-    expect(m[1].detail).toMatch(/52 businesses found — as shown by Aurora/)
+    expect(m[1].detail).toMatch(/52 businesses found/)
     expect(m[1].detail).toMatch(/2 websites checked/)
   })
 
   it('keep Aurora’s own count and the businesses reviewed here as two labelled scopes', () => {
     const d = derive(initialState('iphone-results'))
     const contact = buildMilestones(d.scenario, d.timeline, d.businesses)[2].detail!
-    expect(contact).toMatch(/17 businesses reached — as shown by Aurora/)
+    expect(contact).toMatch(/17 businesses reached/)
     expect(contact).toMatch(/Of the 3 reviewed here: Spoke with 1 · 1 not reached · 1 not contacted/)
   })
 })

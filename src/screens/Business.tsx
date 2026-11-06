@@ -78,7 +78,7 @@ function CallBlock({ c, name }: { c: Call; name: string }) {
   const time = when(c.at)
   const label = c.outcome === 'no_answer' ? 'No one answered' : c.outcome === 'busy' ? 'Line busy' : c.outcome === 'declined' ? 'Declined' : c.outcome === 'technical_failure' ? 'Couldn’t connect' : c.outcome === 'cancelled' ? 'Cancelled' : 'Answered'
   return (
-    <Collapsible headingLevel={3} header={<span className="text-row font-medium">{c.kind === 'follow_up' ? 'Follow-up call' : 'Original call'} · {time ?? 'time not recorded'} · {label}</span>}>
+    <Collapsible headingLevel={3} header={<span className="text-row font-medium">{c.kind === 'follow_up' ? 'Follow-up call' : 'Original call'} {time ? ` · ${time}` : ''} · {label}</span>}>
       <div className="mt-2 flex flex-col gap-3 pl-6">
         {c.summary.length > 0 && <ul className="list-disc pl-5 text-body text-fg">{c.summary.map((s) => <li key={s}>{s}</li>)}</ul>}
         {c.transcriptNote && <p className="text-note text-fg-muted">{c.transcriptNote}</p>}
@@ -149,10 +149,8 @@ export function Business({ id }: { id: string }) {
                 ≈{dist.toFixed(1)} km away
               </a>
             )}
-            {dist != null && <p className="m-0 text-note text-fg-muted">Straight-line estimate, not a route.</p>}
             {b.business.address && <p className="m-0 text-body text-fg-muted">{b.business.address}</p>}
-            {b.business.addressNote && <p className="m-0 text-note text-fg-muted">{b.business.addressNote} Directions search by name and the part of the address shown.</p>}
-            {b.business.rating && <p className="m-0 text-note text-fg-muted">★ {b.business.rating.value} · {b.business.rating.note}</p>}
+            {b.business.rating && <p className="m-0 text-note text-fg-muted">★ {b.business.rating.value}</p>}
           </div>
           {b.business.addressDiscrepancy && <Notice tone="warning" title="Location differs between sources">{b.business.addressDiscrepancy}</Notice>}
           <div className={`grid gap-2 ${b.business.website ? 'grid-cols-3' : 'grid-cols-2'}`}>
