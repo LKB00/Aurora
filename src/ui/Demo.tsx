@@ -35,7 +35,7 @@ export function Controls() {
                   title={s.name}
                   detail={s.description}
                   trailing={s.id === state.scenarioId ? <Badge tone="accent">Showing</Badge> : undefined}
-                  onClick={() => dispatch({ type: 'LOAD_SCENARIO', id: s.id })}
+                  onClick={() => dispatch(s.intro ? { type: 'BEGIN', id: s.id } : { type: 'LOAD_SCENARIO', id: s.id })}
                 />
               ))}
             </ul>
