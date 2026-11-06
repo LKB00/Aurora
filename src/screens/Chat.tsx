@@ -350,7 +350,13 @@ export function Chat() {
   const { state, d, dispatch } = useApp()
   const end = useRef<HTMLDivElement>(null)
   const count = state.chat?.length ?? 0
-  useEffect(() => { if (count) end.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }) }, [count])
+  // After a message is sent or answered, bring the end of the chat into view by scrolling the chat's own scroller only.
+  // (scrollIntoView also scrolls the clipped frames around it, which shifted the whole screen under the message bar.)
+  useEffect(() => {
+    if (!count) return
+    const sc = end.current?.closest<HTMLElement>('[role=region]')
+    sc?.scrollTo({ top: sc.scrollHeight, behavior: 'smooth' })
+  }, [count])
   const done = d.evaluated || d.scenario.recovery != null
   const req = d.scenario.request
   const suggestions = useSuggestions()
