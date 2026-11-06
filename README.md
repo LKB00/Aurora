@@ -1,3 +1,14 @@
+# Aurora · prototype
+
+**Live:** https://lkb00.github.io/Aurora/
+
+A clickable prototype of Aurora: you ask for something, Aurora searches and phones businesses, and you land on a result with the evidence behind it. Built on the **Tattva** design system (`@tattva/ui`).
+It opens on a simulated search that ends in 5 confirmed stores. Everything is simulated: nothing here calls a real business, and the UI says so. Other journeys (no exact match, conflicting answers, follow-up calls, failures) are in the settings button, top right.
+
+Run it: `npm install`, `npm run dev` → http://localhost:5190/. Tests: `npm test`. It deploys to GitHub Pages on every push to `main`.
+
+---
+
 # Aurora · design-system experiment
 
 The same product (Aurora's results, evidence and follow-up flow) rebuilt on **Tattva** (`@tattva/ui` 0.29.1, https://lkb00.github.io/tattva/).
