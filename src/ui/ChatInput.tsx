@@ -13,8 +13,8 @@ function Orb() {
   )
 }
 
-export function ChatInput({ placeholder = 'Ask for anything', onSend }: { placeholder?: string; onSend: (text: string) => void }) {
-  const [value, setValue] = useState('')
+export function ChatInput({ placeholder = 'Ask for anything', onSend, initialValue = '', above }: { placeholder?: string; onSend: (text: string) => void; /** A message already written, waiting to be sent. */ initialValue?: string; /** Something attached to the message, shown inside the bar above the text. */ above?: React.ReactNode }) {
+  const [value, setValue] = useState(initialValue)
   const ref = useRef<HTMLTextAreaElement>(null)
   useEffect(() => {
     const el = ref.current
@@ -30,8 +30,10 @@ export function ChatInput({ placeholder = 'Ask for anything', onSend }: { placeh
   }
   return (
     <div className="flex items-end gap-2.5">
-      <label className="flex min-h-14 min-w-0 flex-1 cursor-text items-end gap-3 rounded-full border border-line bg-surface py-2 pr-2 pl-4 shadow-sm">
+      <label className={`flex min-h-14 min-w-0 flex-1 cursor-text items-end gap-3 border border-line bg-surface py-2 pr-2 pl-4 shadow-sm ${above ? 'rounded-3xl' : 'rounded-full'}`}>
         <span className="grid h-10 place-items-center text-fg-muted" aria-hidden><PlusIcon width={24} height={24} /></span>
+        <span className="flex min-w-0 flex-1 flex-col gap-2">
+        {above}
         <textarea
           ref={ref}
           rows={1}
@@ -40,8 +42,9 @@ export function ChatInput({ placeholder = 'Ask for anything', onSend }: { placeh
           aria-label={placeholder}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
-          className="max-h-26 min-w-0 flex-1 resize-none bg-transparent py-2 text-body text-fg outline-none placeholder:text-fg-subtle"
+          className="max-h-26 w-full min-w-0 resize-none bg-transparent py-2 text-body text-fg outline-none placeholder:text-fg-subtle"
         />
+        </span>
         {value.trim() ? (
           <IconButton label="Send" variant="primary" onClick={send} className="size-11 shrink-0 rounded-full"><SendIcon width={20} height={20} /></IconButton>
         ) : (
